@@ -1,0 +1,8 @@
+
+# Custom linux ingores
+raytracer
+*.o
+.depend
+
+# Visual studio ignores
+# TODO : put here
