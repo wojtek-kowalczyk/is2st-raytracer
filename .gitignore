@@ -1,10 +1,11 @@
-
 # Custom linux ingores
 *.o
 .depend
 note.md
 
 # Visual studio ignores
-# TODO : put here
 .vs/
 x64/
+
+# ignore GoogleTest binaries
+packages/
