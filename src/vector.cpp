@@ -16,31 +16,48 @@ Vector3::Vector3(float x, float y, float z)
 {
 }
 
-Vector3& Vector3::operator+(const Vector3 &other) 
+Vector3 Vector3::operator+(const Vector3 &other) const
 {
-    x += other.x;
-    y += other.y;
-    z += other.z;
+    Vector3 result = *this;
 
-    return *this;
+    result.x += other.x;
+    result.y += other.y;
+    result.z += other.z;
+
+    return result;
 }
 
-Vector3& Vector3::operator-(const Vector3 &other)
+Vector3 Vector3::operator-(const Vector3 &other) const
 {
-    x -= other.x;
-    y -= other.y;
-    z -= other.z;
+    Vector3 result = *this;
 
-    return *this;
+    result.x -= other.x;
+    result.y -= other.y;
+    result.z -= other.z;
+
+    return result;
 }
 
-Vector3& Vector3::operator*(float scalar) 
+Vector3 Vector3::operator*(float scalar) const
 {
-    x *= scalar;
-    y *= scalar;
-    z *= scalar;
+    Vector3 result = *this;
 
-    return *this;
+    result.x *= scalar;
+    result.y *= scalar;
+    result.z *= scalar;
+
+    return result;
+}
+
+Vector3 Vector3::operator/(float scalar) const
+{
+    Vector3 result = *this;
+
+    result.x /= scalar;
+    result.y /= scalar;
+    result.z /= scalar;
+
+	return result;
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector3& v) 

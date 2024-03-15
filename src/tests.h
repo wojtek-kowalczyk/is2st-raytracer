@@ -10,6 +10,7 @@ void TestVector()
     std::cout << v1 + v2 << '\n';
     std::cout << v1 - v2 << '\n';
     std::cout << v2 * 3  << '\n';
+    std::cout << v2 / 1  << '\n';
 
     std::cout << v1.Magnitude() << '\n';
     std::cout << v2.Normalized() << '\n';
