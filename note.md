@@ -11,3 +11,6 @@ ray intersection with primitives. get info about ray.
 4. recursive raytracer (reflections and caustics)
 
 5. extra task will be given individually (for 5)
+
+## Lecture Notes
+

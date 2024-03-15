@@ -3,6 +3,7 @@
 raytracer
 *.o
 .depend
+note.md
 
 # Visual studio ignores
 # TODO : put here

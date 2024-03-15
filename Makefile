@@ -10,8 +10,8 @@ all: $(appname)
 
 $(appname): $(objects)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(appname) $(objects) $(LDLIBS)
-
 depend: .depend
+
 
 .depend: $(srcfiles)
 	rm -f ./.depend
