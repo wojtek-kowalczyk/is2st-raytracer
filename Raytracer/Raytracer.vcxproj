@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\primitives.cpp" />
     <ClCompile Include="src\vector.cpp" />
   </ItemGroup>
   <ItemGroup>
