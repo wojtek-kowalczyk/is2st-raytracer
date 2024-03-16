@@ -1,11 +1,10 @@
 #include "pch.h"
 
-TEST(TestCaseName, TestName1) {
-  EXPECT_EQ(1, 1);
-  EXPECT_TRUE(true);
-}
+#include "vector3.h"
 
-TEST(TestCaseName, TestName2)
-{
-  EXPECT_TRUE(true);
+TEST(TestCaseName, TestName) {
+	Vector3 v1 = Vector3(1, 2, 3);
+
+	EXPECT_EQ(1, 1);
+	EXPECT_TRUE(true);
 }

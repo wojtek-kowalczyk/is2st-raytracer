@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "vector3.h"
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -113,5 +113,5 @@ float Vector3::AngleRad(const Vector3& a, const Vector3& b)
 
 float Vector3::AngleDeg(const Vector3& a, const Vector3& b) 
 {
-    return AngleRad(a, b) * 180.0f / M_PI;
+    return AngleRad(a, b) * (float)(180.0 / M_PI);
 }
