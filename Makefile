@@ -3,23 +3,22 @@ appname := program
 CXX := g++
 CXXFLAGS := -Wall -g
 
-srcfiles := $(shell find Raytracer/src/ -maxdepth 1 -name "*.cpp")
-objects  := $(patsubst %.cpp, %.o, $(srcfiles))
+libsrc := $(shell find Raytracer/src/ -name "*.cpp")
+libobjects  := $(patsubst %.cpp, %.o, $(libsrc))
+
+headsrc := $(shell find RaytracerHead/ -name "*.cpp")
+headobjects  := $(patsubst %.cpp, %.o, $(headsrc))
 
 all: $(appname)
 
 $(appname): $(objects)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(appname) $(objects) $(LDLIBS)
-depend: .depend
-
-
-.depend: $(srcfiles)
-	rm -f ./.depend
-	$(CXX) $(CXXFLAGS) -MM $^>>./.depend;
+	$(CXX) -c $(CXXFLAGS) $(LDFLAGS) -o libraytracer.o $(libsrc) $(LDLIBS)
+	ar rcs Raytracer/bin/lib/libraytracer.a libraytracer.o
+	$(CXX) $(CXXFLAGS) -IRaytracer/src/ -o $(appname) $(headsrc) -LRaytracer/bin/lib -lraytracer
 
 clean:
-	rm -f $(objects)
-	rm -f *~ .depend
+	rm -f $(headobjects)
+	rm -f $(libobjects)
 	rm $(appname)
-
-include .depend
+	rm Raytracer/bin/lib/*
+	rm libraytracer.o

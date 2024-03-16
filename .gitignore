@@ -2,6 +2,9 @@
 *.o
 .depend
 note.md
+.vscode/
+program
+Raytracer/bin/
 
 # Visual studio ignores
 .vs/
