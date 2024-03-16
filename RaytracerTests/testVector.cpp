@@ -151,3 +151,12 @@ TEST(VectorTests, TestAngleDeg)
 
 	EXPECT_FLOAT_EQ(angle, 90.0f);
 }
+
+TEST(VectorTests, TestIsNormalized)
+{
+	Vector3 v(4, 7, 9);
+	v.Normalize();
+	EXPECT_TRUE(v.IsNormalized());
+	EXPECT_TRUE(Vector3(1, 0, 0).IsNormalized());
+	EXPECT_TRUE(Vector3(4, 0, 0).Normalized().IsNormalized());
+}

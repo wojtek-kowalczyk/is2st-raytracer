@@ -21,7 +21,7 @@ struct Sphere
     Vector3 center;
     float radius;
 
-    bool Hit(Ray ray);
+    bool Hit(Ray ray) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Sphere& s)
     {
@@ -35,6 +35,8 @@ struct Plane
     Vector3 point;
     Vector3 normal;
 
+    bool Hit(Ray ray) const;
+
     friend std::ostream& operator<<(std::ostream& os, const Plane& p)
     {
 		os << "Point: " << p.point << ", Normal: " << p.normal;
@@ -47,6 +49,8 @@ struct Triangle
     Vector3 v1;
     Vector3 v2;
     Vector3 v3;
+
+    bool Hit(Ray ray) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Triangle& t)
     {

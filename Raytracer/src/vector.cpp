@@ -92,6 +92,11 @@ float Vector3::Magnitude() const
     return sqrt(tmp);
 }
 
+bool Vector3::IsNormalized() const
+{
+    return Magnitude() - 1.0f < 0.0001f;
+}
+
 float Vector3::Dot(const Vector3& a, const Vector3& b) 
 {
     return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);

@@ -19,6 +19,7 @@ struct Vector3
     void Normalize();
     Vector3 Normalized() const;
     float Magnitude() const;
+    bool IsNormalized() const;
 
     static float Dot(const Vector3& a, const Vector3& b);
     static Vector3 Cross(const Vector3& a, const Vector3& b);
