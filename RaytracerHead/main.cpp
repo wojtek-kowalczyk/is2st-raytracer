@@ -94,7 +94,7 @@ int main()
 	};
 
 	Ray ray1 = Ray{
-		Vector3(-10, 0, -1),
+		Vector3(-0.001, 0.5, -1),
 		Vector3(0, 0, 1)
 	};
 

@@ -153,15 +153,39 @@ TEST(TriangleIntersection, MissCloseToVertex)
 	};
 
 	Ray ray1 = Ray{
-		Vector3(-1, 0, -1),
+		Vector3(-0.001, 0, -1),
 		Vector3(0, 0, 1)
 	};
 
-	EXPECT_EQ(triangle.Hit(ray1), false); // TODO : this is wrong. This should miss, but it hits.
+	Ray ray2 = Ray{
+		Vector3(0.001, 0, -1),
+		Vector3(0, 0, 1)
+	};
+
+	HitResult _;
+	EXPECT_EQ(triangle.Hit(ray1, _), false);
+	EXPECT_EQ(triangle.Hit(ray2, _), true);
 }
 
 TEST(TriangleIntersection, MissCloseToEdge)
 {
-	// TODO
-	FAIL();
+	Triangle triangle = Triangle{
+		Vector3(0, 0, 0),
+		Vector3(1, 0, 0),
+		Vector3(0, 1, 0)
+	};
+
+	Ray ray1 = Ray{
+		Vector3(-0.001, 0.5, -1),
+		Vector3(0, 0, 1)
+	};
+
+	Ray ray2 = Ray{
+		Vector3(0.001, 0.5, -1),
+		Vector3(0, 0, 1)
+	};
+
+	HitResult _;
+	EXPECT_EQ(triangle.Hit(ray1, _), false);
+	EXPECT_EQ(triangle.Hit(ray2, _), true);
 }
