@@ -85,30 +85,5 @@ int main()
 
 	Exercise1();
 
-	std::cout << "=================" << std::endl;
-
-	Triangle triangle = Triangle{
-		Vector3(0, 0, 0),
-		Vector3(1, 0, 0),
-		Vector3(0, 1, 0)
-	};
-
-	Ray ray1 = Ray{
-		Vector3(-0.001, 0.5, -1),
-		Vector3(0, 0, 1)
-	};
-
-	HitResult result;
-	std::cout << triangle.Hit(ray1, result) << '\n';
-
-	// Sphere s{Vector3{1,0,0}, 1};
-	// Ray r1 {Vector3{0, 10, 0}, Vector3{0, -1, 0}};
-	// Ray r2 {Vector3{0, 10, 0}, Vector3{0, +1, 0}};
-	// HitResult result1;
-	// std::cout << s.Hit(r1, result1) << ", intersection at: " << result1.hitPoint << '\n';
-	// HitResult result2;
-	// result2.hitPoint.x = 999;
-	// std::cout << s.Hit(r2, result2) << ", intersection at: " << result2.hitPoint << '\n';
-
 	return 0;
 }
