@@ -4,6 +4,11 @@
 
 #include <ostream>
 
+struct HitResult 
+{
+    Vector3 hitPoint;
+};
+
 struct Ray
 {
     Vector3 origin;
@@ -21,7 +26,7 @@ struct Sphere
     Vector3 center;
     float radius;
 
-    bool Hit(Ray ray) const;
+    bool Hit(Ray ray, HitResult& outHitResult) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Sphere& s)
     {
@@ -35,7 +40,7 @@ struct Plane
     Vector3 point;
     Vector3 normal;
 
-    bool Hit(Ray ray) const;
+    bool Hit(Ray ray, HitResult& outHitResult) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Plane& p)
     {
@@ -50,7 +55,7 @@ struct Triangle
     Vector3 v2;
     Vector3 v3;
 
-    bool Hit(Ray ray) const;
+    bool Hit(Ray ray, HitResult& outHitResult) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Triangle& t)
     {

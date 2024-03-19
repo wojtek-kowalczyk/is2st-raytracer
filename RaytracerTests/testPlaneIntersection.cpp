@@ -4,6 +4,7 @@
 
 TEST(PlaneIntersection, RegularCaseHit)
 {
+	// TODO : this is wrong
 	Plane plane{ Vector3(0, 0, 0), Vector3(0, 1, 0) };
 	Ray ray{ Vector3(0, 0, 1), Vector3(0, 1, 0) };
 

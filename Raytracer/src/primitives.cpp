@@ -1,8 +1,14 @@
 #include "primitives.h"
+#include "vector3.h"
 
 #include <cassert>
+#include <cmath>
+#include <iostream>
+#include <math.h>
 
-bool Sphere::Hit(Ray ray) const
+// TODO : write unit tests for hit point
+
+bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 {
 	Vector3 oc = ray.origin - center;
 
@@ -17,8 +23,14 @@ bool Sphere::Hit(Ray ray) const
 		float x1 = (-b - sqrt(discriminant)) / a;
 		float x2 = (-b + sqrt(discriminant)) / a;
 
-		if (x1 > 0 || x2 > 0)
+		if (x1 > 0)
 		{
+			outHitResult.hitPoint = ray.origin + ray.direction * x1;
+			return true;
+		}
+		if (x2 > 0)
+		{
+			outHitResult.hitPoint = ray.origin + ray.direction * x2;
 			return true;
 		}
 	}
@@ -28,6 +40,7 @@ bool Sphere::Hit(Ray ray) const
 
 		if (x > 0)
 		{
+			outHitResult.hitPoint = ray.origin + ray.direction * x;
 			return true;
 		}
 	}
@@ -35,31 +48,40 @@ bool Sphere::Hit(Ray ray) const
 	return false;
 }
 
-bool Plane::Hit(Ray ray) const
+bool Plane::Hit(Ray ray, HitResult& outHitResult) const
 {
 	assert(normal.IsNormalized());
 	assert(ray.direction.IsNormalized());
 
 	float denominator = Vector3::Dot(normal, ray.direction);
-	if (denominator > 1e-6) // if denom is zero, the ray is parallel
+	if (fabs(denominator) < 0.000001f) // if denom is zero, the ray is parallel
 	{
-		Vector3 toPlanePointFromRayOrigin = point - ray.origin;
-		float t = Vector3::Dot(toPlanePointFromRayOrigin, normal) / denominator;
-		return (t >= 0);
+		return false;
 	}
 
-	return false;
+	Vector3 toPlanePointFromRayOrigin = point - ray.origin;
+	float t = Vector3::Dot(toPlanePointFromRayOrigin, normal) / denominator;
+	outHitResult.hitPoint = ray.origin + ray.direction * t;
+	return (t >= 0);
 }
 
-bool Triangle::Hit(Ray ray) const
+bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 {
+	{
+		// TODO : implement intersection point
+		outHitResult.hitPoint.x = -999;
+		outHitResult.hitPoint.y = -999;
+		outHitResult.hitPoint.z = -999;
+	}
+
 	Vector3 edgeV1V2 = v2 - v1;
 	Vector3 edgeV1V3 = v3 - v1;
 	Vector3 triangleNormal = Vector3::Cross(edgeV1V2, edgeV1V3);
 
 	float dotRayDirectionTriangleNormal = Vector3::Dot(ray.direction, triangleNormal);
-	bool isParallel = dotRayDirectionTriangleNormal < 1e-6;
-	if (isParallel)
+	bool isOrthogonalToNormal = dotRayDirectionTriangleNormal < 1e-6;
+	bool isParallelToTriangle = isOrthogonalToNormal;
+	if (isParallelToTriangle)
 	{
 		return false;
 	}
