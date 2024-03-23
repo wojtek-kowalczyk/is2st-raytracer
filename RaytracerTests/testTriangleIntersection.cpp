@@ -11,7 +11,7 @@ TEST(TriangleIntersection, RegularHit)
 	};
 
 	Ray ray = Ray{
-		Vector3(0.8, 0.2, -1),
+		Vector3(0.2f, 0.2f, -1),
 		Vector3(0, 0, 1)
 	};
 
@@ -113,8 +113,8 @@ TEST(TriangleIntersection, HitAtEdge)
 {
 	Triangle triangle = Triangle{
 		Vector3(0, 0, 0),
+		Vector3(0, 1, 0),
 		Vector3(1, 0, 0),
-		Vector3(0, 1, 0)
 	};
 
 	Ray ray1 = Ray{
@@ -153,18 +153,17 @@ TEST(TriangleIntersection, MissCloseToVertex)
 	};
 
 	Ray ray1 = Ray{
-		Vector3(-0.001, 0, -1),
+		Vector3(-0.001f, 0, -1),
 		Vector3(0, 0, 1)
 	};
 
 	Ray ray2 = Ray{
-		Vector3(0.001, 0, -1),
+		Vector3(0.001f, 0, -1),
 		Vector3(0, 0, 1)
 	};
 
-	HitResult _;
-	EXPECT_EQ(triangle.Hit(ray1, _), false);
-	EXPECT_EQ(triangle.Hit(ray2, _), true);
+	EXPECT_EQ(triangle.Hit(ray1), false);
+	EXPECT_EQ(triangle.Hit(ray2), true);
 }
 
 TEST(TriangleIntersection, MissCloseToEdge)
@@ -176,16 +175,15 @@ TEST(TriangleIntersection, MissCloseToEdge)
 	};
 
 	Ray ray1 = Ray{
-		Vector3(-0.001, 0.5, -1),
+		Vector3(-0.001f, 0.5f, -1),
 		Vector3(0, 0, 1)
 	};
 
 	Ray ray2 = Ray{
-		Vector3(0.001, 0.5, -1),
+		Vector3(0.001f, 0.5f, -1),
 		Vector3(0, 0, 1)
 	};
 
-	HitResult _;
-	EXPECT_EQ(triangle.Hit(ray1, _), false);
-	EXPECT_EQ(triangle.Hit(ray2, _), true);
+	EXPECT_EQ(triangle.Hit(ray1), false);
+	EXPECT_EQ(triangle.Hit(ray2), true);
 }

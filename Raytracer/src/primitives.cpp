@@ -8,6 +8,13 @@
 
 // TODO : write unit tests for hit point
 
+bool Sphere::Hit(Ray ray) const
+{
+	HitResult _;
+	return Hit(ray, _);
+}
+
+
 bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 {
 	Vector3 oc = ray.origin - center;
@@ -48,6 +55,12 @@ bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 	return false;
 }
 
+bool Plane::Hit(Ray ray) const
+{
+	HitResult _;
+	return Hit(ray, _);
+}
+
 bool Plane::Hit(Ray ray, HitResult& outHitResult) const
 {
 	assert(normal.IsNormalized());
@@ -65,18 +78,18 @@ bool Plane::Hit(Ray ray, HitResult& outHitResult) const
 	return (t >= 0);
 }
 
+bool Triangle::Hit(Ray ray) const
+{
+	HitResult _;
+	return Hit(ray, _);
+}
+
 bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 {
-	{
-		// TODO : implement intersection point
-		outHitResult.hitPoint.x = -999;
-		outHitResult.hitPoint.y = -999;
-		outHitResult.hitPoint.z = -999;
-	}
-
 	Vector3 edgeV1V2 = v2 - v1;
-	Vector3 edgeV1V3 = v3 - v1;
-	Vector3 triangleNormal = Vector3::Cross(edgeV1V2, edgeV1V3);
+	Vector3 edgeV2V3 = v3 - v2;
+	Vector3 edgeV3V1 = v1 - v3;
+	Vector3 triangleNormal = Vector3::Cross(edgeV1V2, edgeV2V3);
 
 	float dotRayDirectionTriangleNormal = Vector3::Dot(ray.direction, triangleNormal);
 	bool isOrthogonalToNormal = fabs(dotRayDirectionTriangleNormal) < 1e-6;
@@ -101,14 +114,17 @@ bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 	Vector3 v3ToIntersection = intersectionPoint - v3;
 
 	Vector3 cross1 = Vector3::Cross(edgeV1V2, v1ToIntersection);
-	Vector3 cross2 = Vector3::Cross(edgeV1V3, v2ToIntersection);
-	Vector3 edgeV2V3 = v2 - v3;
-	Vector3 cross3 = Vector3::Cross(edgeV2V3, v3ToIntersection);
+	Vector3 cross2 = Vector3::Cross(edgeV2V3, v2ToIntersection);
+	Vector3 cross3 = Vector3::Cross(edgeV3V1, v3ToIntersection);
+
+	// >= makes it so we can hit edges and vertices
 
 	bool isInsideTriangle = 
 		Vector3::Dot(triangleNormal, cross1) >= 0 &&
 		Vector3::Dot(triangleNormal, cross2) >= 0 &&
 		Vector3::Dot(triangleNormal, cross3) >= 0;
+
+	outHitResult.hitPoint = intersectionPoint;
 
 	return isInsideTriangle;
 }

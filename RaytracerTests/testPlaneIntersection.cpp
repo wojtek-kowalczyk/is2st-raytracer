@@ -4,9 +4,8 @@
 
 TEST(PlaneIntersection, RegularCaseHit)
 {
-	// TODO : this is wrong
 	Plane plane{ Vector3(0, 0, 0), Vector3(0, 1, 0) };
-	Ray ray{ Vector3(0, 0, 1), Vector3(0, 1, 0) };
+	Ray ray{ Vector3(0, 1, 0), Vector3(0, -1, 0) };
 
 	EXPECT_EQ(plane.Hit(ray), true);
 }
@@ -14,7 +13,7 @@ TEST(PlaneIntersection, RegularCaseHit)
 TEST(PlaneIntersection, RegularCaseMiss)
 {
 	Plane plane{ Vector3(0, 0, 0), Vector3(0, 1, 0) };
-	Ray ray{ Vector3(0, 0, 1), Vector3(0, -1, 0) };
+	Ray ray{ Vector3(0, 1, 0), Vector3(0, 1, 0) };
 
 	EXPECT_EQ(plane.Hit(ray), false);
 }
