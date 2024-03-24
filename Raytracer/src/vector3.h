@@ -7,9 +7,22 @@ struct Vector3
     Vector3();
     Vector3(float x, float y, float z);
 
-    float x;
-    float y;
-    float z;
+    union
+    {
+        struct
+        {
+            float x;
+            float y;
+            float z;
+        };
+
+        struct
+        {
+            float r;
+            float g;
+            float b;
+        };
+    };
 
     Vector3 operator+(const Vector3& other) const;
     Vector3 operator-(const Vector3& other) const;

@@ -1,25 +1,9 @@
 #pragma once
 
 #include "vector3.h"
+#include "ray.h"
 
 #include <ostream>
-
-struct HitResult 
-{
-    Vector3 hitPoint;
-};
-
-struct Ray
-{
-    Vector3 origin;
-    Vector3 direction;
-
-    friend std::ostream& operator<<(std::ostream& os, const Ray& r)
-    {
-		os << "Origin: " << r.origin << ", Direction: " << r.direction;
-		return os;
-	}
-};
 
 struct Sphere
 {

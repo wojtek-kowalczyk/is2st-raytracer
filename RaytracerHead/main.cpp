@@ -4,6 +4,7 @@
 #include "primitives.h"
 #include "vector3.h"
 #include "buffer.h"
+#include "camera.h"
 
 // TODO : when imlpementing camera, put matrix at 0,0,0, and put camera back, at the middle. 
 // -Z forward? or +Z forward, make decision and be consistent
@@ -89,13 +90,32 @@ void Exercise1()
 * Nale¿y zaimplementowaæ podan¹ metod¹ antyaliasingu adaptacyjnego lub w³asn¹, zaproponowan¹ metodê.
 */
 
+void Exercise2()
+{
+	Buffer buffer(600, 400);
+	buffer.ClearColor(0xFF000000);
+
+	OrthographicCamera camera(Vector3{ 0, 0, -200 }, Vector3{ 0, 0, 1 }, buffer.GetWidth(), buffer.GetHeight());
+
+	// Pseudo-scene
+	Sphere sphere1{ Vector3{ 300, 200, 0 }, 100};
+
+	for (int y = 0; y < buffer.GetHeight(); y++)
+	{
+		for (int x = 0; x < buffer.GetWidth(); x++)
+		{
+			Ray ray = camera.ConstructRay(x, y);
+			buffer.ColorAt(x, y) = sphere1.Hit(ray) ? 0xFFFFFFFF : 0xFF000000;
+		}
+	}
+
+	buffer.SaveToFile("render.tga");
+}
+
 int main()
 {
 	//Exercise1();
-
-	Buffer buffer(800, 600);
-	buffer.ClearColor(0xFFFF00FF); // ARGB
-	buffer.SaveToFile("render.tga");
+	Exercise2();
 
 	return 0;
 }

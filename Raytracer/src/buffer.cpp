@@ -21,11 +21,11 @@ Buffer::~Buffer()
     m_colorBuffer = nullptr;
 }
 
-void Buffer::ClearColor(uint32_t argb)
+void Buffer::ClearColor(ARGB color)
 {
     for (int i = 0; i < m_width * m_height; i++)
     {
-        m_colorBuffer[i] = argb;
+        m_colorBuffer[i] = color;
     }
 }
 

@@ -20,12 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\buffer.cpp" />
+    <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\primitives.cpp" />
     <ClCompile Include="src\vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\buffer.h" />
+    <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\mathHelpers.h" />
     <ClInclude Include="src\primitives.h" />
+    <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\tests.h" />
     <ClInclude Include="src\vector3.h" />
   </ItemGroup>
