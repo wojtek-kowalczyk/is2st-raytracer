@@ -1,5 +1,7 @@
 #include "camera.h"
 
+#include "mathHelpers.h"
+
 OrthographicCamera::OrthographicCamera(const Vector3& position, const Vector3& forward, int resolutionX, int resolutionY)
     : m_position(position), m_forward(forward), m_resolutionX(resolutionX), m_resolutionY(resolutionY)
 {
@@ -7,15 +9,10 @@ OrthographicCamera::OrthographicCamera(const Vector3& position, const Vector3& f
 
 Ray OrthographicCamera::ConstructRay(int pixelX, int pixelY) const
 {
-    //float pixelWidth = 2.0f / m_resolutionX;
-    //float pixelHeight = 2.0f / m_resolutionY;
-
-    //float pixelCenterX = -1.0f + (pixelX + 0.5f) * pixelWidth;
-    //float pixelCenterY = +1.0f - (pixelY + 0.5f) * pixelHeight;
-
-    //Ray ray(Vector3{ pixelCenterX, pixelCenterY, 0 }, Vector3{ 0, 0, 1 });
-
-    Ray ray{ m_position + Vector3{(float)pixelX, (float)pixelY, 0}, m_forward };
+    float aspectRatio = m_resolutionX / (float)m_resolutionY;
+    float x = ToCanonicalSpace(pixelX, m_resolutionX) * aspectRatio;
+    float y = ToCanonicalSpace(pixelY, m_resolutionY);
+    Ray ray(Vector3{ x, y, 0 }, m_forward);
 
     return ray;
 }

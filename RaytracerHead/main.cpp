@@ -95,10 +95,10 @@ void Exercise2()
 	Buffer buffer(600, 400);
 	buffer.ClearColor(0xFF000000);
 
-	OrthographicCamera camera(Vector3{ 0, 0, -200 }, Vector3{ 0, 0, 1 }, buffer.GetWidth(), buffer.GetHeight());
+	OrthographicCamera camera(Vector3{ 0, 0, -2 }, Vector3{ 0, 0, 1 }, buffer.GetWidth(), buffer.GetHeight());
 
 	// Pseudo-scene
-	Sphere sphere1{ Vector3{ 300, 200, 0 }, 100};
+	Sphere sphere1{ Vector3{ 0, 0, 0 }, 0.75f};
 
 	for (int y = 0; y < buffer.GetHeight(); y++)
 	{
