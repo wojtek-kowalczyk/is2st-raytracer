@@ -6,9 +6,6 @@
 #include "buffer.h"
 #include "camera.h"
 
-// TODO : when imlpementing camera, put matrix at 0,0,0, and put camera back, at the middle. 
-// -Z forward? or +Z forward, make decision and be consistent
-
 void Exercise1() 
 {
 	std::cout << std::boolalpha; // print true/false instead of 1/0
@@ -84,37 +81,54 @@ void Exercise1()
 }
 
 /*
-* Exercise 2
-* Proszê zaimplementowaæ klasy obrazu, natê¿enia i kamery (ortogonaln¹ oraz perpsektywiczn¹),
-* a nastêpnie wyrenderowaæ obraz, zawieraj¹cy dwie kule. wykorzystuj¹c rzut perspektywiczny i rzut ortogonalny.
-* Nale¿y zaimplementowaæ podan¹ metod¹ antyaliasingu adaptacyjnego lub w³asn¹, zaproponowan¹ metodê.
+* Exercise 2 Checklist
+* 
+* Proszê zaimplementowaæ klasy obrazu...........................(DONE)
+* natê¿enia.....................................................(CAN USE Vector3) 
+* kamery (ortogonaln¹ oraz perpsektywiczn¹).....................(DONE),
+* wyrenderowaæ obraz zawieraj¹cy dwie kule: persp i ortho.......(DONE)
+* 
+* Nale¿y zaimplementowaæ podan¹ metod¹ antyaliasingu adaptacyjnego lub w³asn¹, zaproponowan¹ metodê. (TODO)
 */
 
 void Exercise2()
 {
-	Buffer buffer(600, 400);
-	buffer.ClearColor(0xFF000000);
-
-	OrthographicCamera camera(Vector3{ 0, 0, -2 }, Vector3{ 0, 0, 1 }, buffer.GetWidth(), buffer.GetHeight());
+	Buffer orthoCameraTarget(600, 400);
+	Buffer perspCameraTarget(600, 400);
 
 	// Pseudo-scene
-	Sphere sphere1{ Vector3{ 0, 0, 0 }, 0.75f};
+	Sphere sphere1{ Vector3{ 0, 0, 0 }, 1.0f };
+	Sphere sphere2{ Vector3{ 2, 2, 5 }, 1.0f };
 
-	for (int y = 0; y < buffer.GetHeight(); y++)
+	OrthographicCamera orthoCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);
+	PerspectiveCamera perspCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
+	
+	for (int y = 0; y < orthoCameraTarget.GetHeight(); y++)
 	{
-		for (int x = 0; x < buffer.GetWidth(); x++)
+		for (int x = 0; x < orthoCameraTarget.GetWidth(); x++)
 		{
-			Ray ray = camera.ConstructRay(x, y);
-			buffer.ColorAt(x, y) = sphere1.Hit(ray) ? 0xFFFFFFFF : 0xFF000000;
+			// DO othrographic
+			{
+				Ray ray = orthoCamera.ConstructRay(x, y);
+				orthoCameraTarget.ColorAt(x, y) = sphere1.Hit(ray) ? 0xFFFF0000 : 0xFF000000;
+				orthoCameraTarget.ColorAt(x, y) = sphere2.Hit(ray) ? 0xFF00FF00 : orthoCameraTarget.ColorAt(x, y);
+			}
+
+			// DO Perspective
+			{
+				Ray ray = perspCamera.ConstructRay(x, y);
+				perspCameraTarget.ColorAt(x, y) = sphere1.Hit(ray) ? 0xFFFF0000 : 0xFF000000;
+				perspCameraTarget.ColorAt(x, y) = sphere2.Hit(ray) ? 0xFF00FF00 : perspCameraTarget.ColorAt(x, y);
+			}
 		}
 	}
 
-	buffer.SaveToFile("render.tga");
+	orthoCameraTarget.SaveToFile("render_ortho.tga");
+	perspCameraTarget.SaveToFile("render_persp.tga");
 }
 
 int main()
 {
-	//Exercise1();
 	Exercise2();
 
 	return 0;
