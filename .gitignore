@@ -12,3 +12,6 @@ x64/
 
 # ignore GoogleTest binaries
 packages/
+
+# Other ignores
+*.tga

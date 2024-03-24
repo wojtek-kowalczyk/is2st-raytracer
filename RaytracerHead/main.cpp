@@ -3,12 +3,15 @@
 
 #include "primitives.h"
 #include "vector3.h"
+#include "buffer.h"
 
 // TODO : when imlpementing camera, put matrix at 0,0,0, and put camera back, at the middle. 
 // -Z forward? or +Z forward, make decision and be consistent
 
 void Exercise1() 
 {
+	std::cout << std::boolalpha; // print true/false instead of 1/0
+
 	// 2.
 	Vector3 a {1,2,3};
 	Vector3 b {2, 3, 4};
@@ -79,11 +82,20 @@ void Exercise1()
 	}
 }
 
+/*
+* Exercise 2
+* Proszê zaimplementowaæ klasy obrazu, natê¿enia i kamery (ortogonaln¹ oraz perpsektywiczn¹),
+* a nastêpnie wyrenderowaæ obraz, zawieraj¹cy dwie kule. wykorzystuj¹c rzut perspektywiczny i rzut ortogonalny.
+* Nale¿y zaimplementowaæ podan¹ metod¹ antyaliasingu adaptacyjnego lub w³asn¹, zaproponowan¹ metodê.
+*/
+
 int main()
 {
-	std::cout << std::boolalpha;
+	//Exercise1();
 
-	Exercise1();
+	Buffer buffer(800, 600);
+	buffer.ClearColor(0xFFFF00FF); // ARGB
+	buffer.SaveToFile("render.tga");
 
 	return 0;
 }
