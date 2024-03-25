@@ -103,9 +103,9 @@ void Exercise2()
 	OrthographicCamera orthoCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);
 	PerspectiveCamera perspCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
 	
-	for (int y = 0; y < orthoCameraTarget.GetHeight(); y++)
+	for (int y = 0; y < orthoCameraTarget.GetHeight() - 1; y++)
 	{
-		for (int x = 0; x < orthoCameraTarget.GetWidth(); x++)
+		for (int x = 0; x < orthoCameraTarget.GetWidth() - 1; x++)
 		{
 			// DO othrographic
 			{
@@ -116,8 +116,20 @@ void Exercise2()
 
 			// DO Perspective
 			{
+				int colSum = 0;
 				Ray ray = perspCamera.ConstructRay(x, y);
-				perspCameraTarget.ColorAt(x, y) = sphere1.Hit(ray) ? 0xFFFF0000 : 0xFF000000;
+				colSum += sphere1.Hit(ray);
+				ray = perspCamera.ConstructRay(x + 1, y);
+				colSum += sphere1.Hit(ray);
+				perspCamera.ConstructRay(x, y + 1);
+				colSum += sphere1.Hit(ray);
+				perspCamera.ConstructRay(x+ 1, y + 1);
+				colSum += sphere1.Hit(ray);
+				//perspCameraTarget.ColorAt(x, y) = sphere1.Hit(ray) ? 0xFFFF0000 : 0xFF000000;
+				float colFactor = (float)colSum / 4.0f;
+				unsigned char finalAlpha = (0xFF >> 24) * colFactor; // is necessary?
+				unsigned char finalRed = ((0x00FF0000 >> 16) & 0xFF) * colFactor;
+				perspCameraTarget.ColorAt(x, y) = (0xFF << 24) | (finalRed << 16) | (0x00 << 8) | (0x00);
 				perspCameraTarget.ColorAt(x, y) = sphere2.Hit(ray) ? 0xFF00FF00 : perspCameraTarget.ColorAt(x, y);
 			}
 		}
