@@ -1,8 +1,13 @@
 #pragma once
 
+#include "vector3.h"
+#include <cstdint>
+
 struct HitResult
 {
-    Vector3 hitPoint;
+    Vector3 hitPoint {0, 0, 0};
+    uint32_t color = 0; // TODO : temporary implementation, ideally pass reference to the hit obj to get its material
+    // SceneObject* hitObject; // TODO : object lifetime - care for invalid pointer
 };
 
 struct Ray

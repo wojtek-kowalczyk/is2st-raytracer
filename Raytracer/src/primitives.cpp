@@ -1,4 +1,5 @@
 #include "primitives.h"
+#include "sceneObject.h"
 #include "vector3.h"
 
 #include <cassert>
@@ -8,15 +9,14 @@
 
 // TODO : write unit tests for hit point
 
-bool Sphere::Hit(Ray ray) const
+Sphere::Sphere(Vector3 center, float radius) : SceneObject(), center(center), radius(radius) 
 {
-	HitResult _;
-	return Hit(ray, _);
 }
-
 
 bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 {
+	outHitResult.color = this->color;
+
 	Vector3 oc = ray.origin - center;
 
 	float a = Vector3::Dot(ray.direction, ray.direction);
@@ -59,7 +59,7 @@ float Sphere::aaFactor(float x, float y, Sphere sphere, Camera& camera, float si
 	int hitSum = 0;
 	if (failsafe >= 2) {
 		Ray ray = camera.ConstructRay(x, y);
-		return (float)sphere.Hit(ray);
+		return (float)sphere.SceneObject::Hit(ray); // TODO : awkward base class call
 	}
 
 	float hits[4] = {};
@@ -89,16 +89,12 @@ unsigned int Sphere::finalColor(unsigned int color, float aaFactor) {
 	return finalColor;
 }
 
-bool Plane::Hit(Ray ray) const
-{
-	HitResult _;
-	return Hit(ray, _);
-}
-
 bool Plane::Hit(Ray ray, HitResult& outHitResult) const
 {
 	assert(normal.IsNormalized());
 	assert(ray.direction.IsNormalized());
+
+	outHitResult.color = this->color;
 
 	float denominator = Vector3::Dot(normal, ray.direction);
 	if (fabs(denominator) < 0.000001f) // if denom is zero, the ray is parallel
@@ -116,7 +112,7 @@ float Plane::aaFactor(float x, float y, Plane plane, Camera& camera, float size,
 	int hitSum = 0;
 	if (failsafe >= 2) {
 		Ray ray = camera.ConstructRay(x, y);
-		return (float)plane.Hit(ray);
+		return (float)plane.SceneObject::Hit(ray); // awkward base class call
 	}
 
 	float hits[4] = {};
@@ -145,14 +141,10 @@ unsigned int Plane::finalColor(unsigned int color, float aaFactor) {
 	return finalColor;
 }
 
-bool Triangle::Hit(Ray ray) const
-{
-	HitResult _;
-	return Hit(ray, _);
-}
-
 bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 {
+	outHitResult.color = this->color;
+
 	Vector3 edgeV1V2 = v2 - v1;
 	Vector3 edgeV2V3 = v3 - v2;
 	Vector3 edgeV3V1 = v1 - v3;
@@ -200,7 +192,7 @@ float Triangle::aaFactor(float x, float y, Triangle triangle, Camera& camera, fl
 	int hitSum = 0;
 	if (failsafe >= 2) {
 		Ray ray = camera.ConstructRay(x, y);
-		return (float)triangle.Hit(ray);
+		return (float)triangle.SceneObject::Hit(ray); // TODO : awkward base class call
 	}
 
 	float hits[4] = {};

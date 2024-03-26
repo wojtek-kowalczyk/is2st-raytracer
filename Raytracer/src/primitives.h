@@ -2,17 +2,20 @@
 
 #include "vector3.h"
 #include "ray.h"
-
-#include <ostream>
+#include "sceneObject.h"
+#include "scene.h"
 #include "camera.h"
 
-struct Sphere
+#include <ostream>
+
+struct Sphere : public SceneObject
 {
     Vector3 center;
     float radius;
 
-    bool Hit(Ray ray, HitResult& outHitResult) const;
-    bool Hit(Ray ray) const;
+    Sphere(Vector3 center, float radius);
+    virtual bool Hit(Ray ray, HitResult& outHitResult) const override;
+
     float aaFactor(float x, float y, Sphere sphere, Camera& camera, float size, int failsafe = 0);
     unsigned int finalColor(unsigned int color, float aaFactor);
 
@@ -23,13 +26,12 @@ struct Sphere
     }
 };
 
-struct Plane 
+struct Plane : public SceneObject
 {
     Vector3 point;
     Vector3 normal;
 
-    bool Hit(Ray ray, HitResult& outHitResult) const;
-    bool Hit(Ray ray) const;
+    bool Hit(Ray ray, HitResult& outHitResult) const override;
     float aaFactor(float x, float y, Plane plane, Camera& camera, float size, int failsafe = 0);
     unsigned int finalColor(unsigned int color, float aaFactor);
 
@@ -40,14 +42,14 @@ struct Plane
     }
 };
 
-struct Triangle 
+struct Triangle : public SceneObject 
 {
     Vector3 v1;
     Vector3 v2;
     Vector3 v3;
 
-    bool Hit(Ray ray, HitResult& outHitResult) const;
-    bool Hit(Ray ray) const;
+    bool Hit(Ray ray, HitResult& outHitResult) const override;
+
     float aaFactor(float x, float y, Triangle triangle, Camera& camera, float size, int failsafe = 0);
     unsigned int finalColor(unsigned int color, float aaFactor);
 

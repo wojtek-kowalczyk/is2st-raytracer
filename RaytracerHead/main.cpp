@@ -2,10 +2,13 @@
 #include <ostream>
 
 #include "primitives.h"
+#include "ray.h"
 #include "vector3.h"
 #include "buffer.h"
 #include "camera.h"
+#include "scene.h"
 
+#if 0 // TODO
 void Exercise1() 
 {
 	std::cout << std::boolalpha; // print true/false instead of 1/0
@@ -79,16 +82,17 @@ void Exercise1()
 		std::cout << "15.3. " << triangle.Hit(ray, result) << ", intersection at: " << result.hitPoint << '\n';
 	}
 }
+#endif	
 
 /*
 * Exercise 2 Checklist
 * 
-* Proszê zaimplementowaæ klasy obrazu...........................(DONE)
-* natê¿enia.....................................................(CAN USE Vector3) 
-* kamery (ortogonaln¹ oraz perpsektywiczn¹).....................(DONE),
-* wyrenderowaæ obraz zawieraj¹cy dwie kule: persp i ortho.......(DONE)
+* Proszï¿½ zaimplementowaï¿½ klasy obrazu...........................(DONE)
+* natï¿½enia.....................................................(CAN USE Vector3) 
+* kamery (ortogonalnï¿½ oraz perpsektywicznï¿½).....................(DONE),
+* wyrenderowaï¿½ obraz zawierajï¿½cy dwie kule: persp i ortho.......(DONE)
 * 
-* Nale¿y zaimplementowaæ podan¹ metod¹ antyaliasingu adaptacyjnego lub w³asn¹, zaproponowan¹ metodê. (TODO)
+* Naleï¿½y zaimplementowaï¿½ podanï¿½ metodï¿½ antyaliasingu adaptacyjnego lub wï¿½asnï¿½, zaproponowanï¿½ metodï¿½. (TODO)
 */
 
 void Exercise2()
@@ -96,9 +100,13 @@ void Exercise2()
 	Buffer orthoCameraTarget(600, 400);
 	Buffer perspCameraTarget(600, 400);
 
-	// Pseudo-scene
-	Sphere sphere1{ Vector3{ 0, 0, 0 }, 1.0f };
-	Sphere sphere2{ Vector3{ 2, 2, 5 }, 1.0f };
+	Sphere sphere1(Vector3{ 0, 0, 0 }, 1.0f);
+	sphere1.color = 0xFFFF0000;
+	Sphere sphere2(Vector3{ 1, 0, 5 }, 1.0f);
+	sphere2.color = 0xFF00FF00;
+	Scene scene;
+	scene.AddObject(&sphere1);
+	scene.AddObject(&sphere2);
 
 	OrthographicCamera orthoCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);
 	PerspectiveCamera perspCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
@@ -110,9 +118,14 @@ void Exercise2()
 			// DO othrographic
 			{
 				Ray ray = orthoCamera.ConstructRay(x, y);
-				orthoCameraTarget.ColorAt(x, y) = sphere1.Hit(ray) ? 0xFFFF0000 : 0xFF000000;
-				orthoCameraTarget.ColorAt(x, y) = sphere2.Hit(ray) ? 0xFF00FF00 : orthoCameraTarget.ColorAt(x, y);
+				HitResult closestHit;
+				if (scene.GetClosestHit(ray, closestHit)) 
+				{
+					orthoCameraTarget.ColorAt(x, y) = closestHit.color; // TODO : this color passing is awkward
+				}
 			}
+
+#if 0 // TMP disabled
 
 			// DO Perspective
 			{
@@ -136,6 +149,7 @@ void Exercise2()
 
 				
 			}
+#endif	
 		}
 	}
 
