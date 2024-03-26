@@ -75,15 +75,17 @@ float Sphere::aaFactor(float x, float y, Sphere sphere, Camera& camera, float si
 }
 
 unsigned int Sphere::finalColor(unsigned int color, float aaFactor) {
+	unsigned char alpha = (color >> 24) & 0xFF;
 	unsigned char r = (color >> 16) & 0xFF;
 	unsigned char g = (color >> 8) & 0xFF;
 	unsigned char b = color & 0xFF;
 
+	unsigned char finalAlpha = (unsigned char)(alpha * aaFactor);
 	unsigned char finalR = (unsigned char)(r * aaFactor);
 	unsigned char finalG = (unsigned char)(g * aaFactor);
 	unsigned char finalB = (unsigned char)(b * aaFactor);
 
-	unsigned int finalColor = (0xFF << 24) | (finalR << 16) | (finalG << 8) | finalB;
+	unsigned int finalColor = (finalAlpha << 24) | (finalR << 16) | (finalG << 8) | finalB;
 	return finalColor;
 }
 
@@ -125,20 +127,21 @@ float Plane::aaFactor(float x, float y, Plane plane, Camera& camera, float size,
 	hits[2] = aaFactor(x, y + halfSize, plane, camera, halfSize, failsafe + 1);
 	hits[3] = aaFactor(x + halfSize, y + halfSize, plane, camera, halfSize, failsafe + 1);
 	float sumOfHits = hits[0] + hits[1] + hits[2] + hits[3];
-
 	return sumOfHits / 4.0f;
 }
 
 unsigned int Plane::finalColor(unsigned int color, float aaFactor) {
+	unsigned char alpha = (color >> 24) & 0xFF;
 	unsigned char r = (color >> 16) & 0xFF;
 	unsigned char g = (color >> 8) & 0xFF;
 	unsigned char b = color & 0xFF;
 
+	unsigned char finalAlpha = (unsigned char)(alpha * aaFactor);
 	unsigned char finalR = (unsigned char)(r * aaFactor);
 	unsigned char finalG = (unsigned char)(g * aaFactor);
 	unsigned char finalB = (unsigned char)(b * aaFactor);
 
-	unsigned int finalColor = (0xFF << 24) | (finalR << 16) | (finalG << 8) | finalB;
+	unsigned int finalColor = (finalAlpha << 24) | (finalR << 16) | (finalG << 8) | finalB;
 	return finalColor;
 }
 

@@ -116,19 +116,20 @@ void Exercise2()
 
 			// DO Perspective
 			{
-				perspCameraTarget.ColorAt(x, y) = sphere2.finalColor(0xFFFF0000, sphere2.aaFactor((float)x, (float)y, sphere2, perspCamera, 1.0f));
+				perspCameraTarget.ColorAt(x, y) = sphere2.finalColor(0xFF00FF00, sphere2.aaFactor((float)x, (float)y, sphere2, perspCamera, 1.0f));
 
 				unsigned int sphere1Color = sphere1.finalColor(0xFFFF0000, sphere1.aaFactor((float)x, (float)y, sphere1, perspCamera, 1.0f));
 
+
+
 				float sphere1Alpha = static_cast<float>((sphere1Color >> 24) & 0xFF) / 255.0f;
-				std::cout << sphere1Alpha << std::endl;
 
 				perspCameraTarget.ColorAt(x, y) = ((unsigned char)(((sphere1Color >> 24) & 0xFF) * sphere1Alpha) << 24) |
 												  ((unsigned char)(((sphere1Color >> 16) & 0xFF) * sphere1Alpha) << 16) |
 												  ((unsigned char)(((sphere1Color >> 8) & 0xFF) * sphere1Alpha) << 8) | 
 												  ((unsigned char)(((sphere1Color) & 0xFF) * sphere1Alpha))
 												  +
-												  ((unsigned char)(((perspCameraTarget.ColorAt(x, y) >> 24) & 0xFF) * perspCameraTarget.ColorAt(x, y)) << 24) |
+												  ((unsigned char)(((perspCameraTarget.ColorAt(x, y) >> 24) & 0xFF) * (1.0f - sphere1Alpha)) << 24) |
 												  ((unsigned char)(((perspCameraTarget.ColorAt(x, y) >> 16) & 0xFF) * (1.0f - sphere1Alpha)) << 16) |
 												  ((unsigned char)(((perspCameraTarget.ColorAt(x, y) >> 8) & 0xFF) * (1.0f - sphere1Alpha)) << 8) |
 												  ((unsigned char)(((perspCameraTarget.ColorAt(x, y)) & 0xFF) * (1.0f - sphere1Alpha)));
