@@ -130,7 +130,8 @@ void Exercise2()
 				unsigned char finalAlpha = (0xFF >> 24) * colFactor; // is necessary?
 				unsigned char finalRed = ((0x00FF0000 >> 16) & 0xFF) * colFactor;
 				perspCameraTarget.ColorAt(x, y) = sphere1.finalColor(0xFFFF0000, sphere1.aaFactor((float)x, (float)y, sphere1, perspCamera, 1.0f));
-				perspCameraTarget.ColorAt(x, y) = sphere2.Hit(ray) ? 0xFF00FF00 : perspCameraTarget.ColorAt(x, y);
+				//perspCameraTarget.ColorAt(x, y) = sphere2.Hit(ray) ? 0xFF00FF00 : perspCameraTarget.ColorAt(x, y);
+				perspCameraTarget.ColorAt(x, y) = sphere2.finalColor(0xFFFF0000, sphere2.aaFactor((float)x, (float)y, sphere2, perspCamera, 1.0f));
 			}
 		}
 	}

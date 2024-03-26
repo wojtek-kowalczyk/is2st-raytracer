@@ -213,14 +213,16 @@ float Triangle::aaFactor(float x, float y, Triangle triangle, Camera& camera, fl
 }
 
 unsigned int Triangle::finalColor(unsigned int color, float aaFactor) {
+	unsigned char alpha = (color >> 24) & 0xFF;
 	unsigned char r = (color >> 16) & 0xFF;
 	unsigned char g = (color >> 8) & 0xFF;
 	unsigned char b = color & 0xFF;
 
+	unsigned char finalAlpha = (unsigned char)(alpha * aaFactor);
 	unsigned char finalR = (unsigned char)(r * aaFactor);
 	unsigned char finalG = (unsigned char)(g * aaFactor);
 	unsigned char finalB = (unsigned char)(b * aaFactor);
 
-	unsigned int finalColor = (0xFF << 24) | (finalR << 16) | (finalG << 8) | finalB;
+	unsigned int finalColor = (finalAlpha << 24) | (finalR << 16) | (finalG << 8) | finalB;
 	return finalColor;
 }
