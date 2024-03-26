@@ -30,6 +30,8 @@ struct Plane
 
     bool Hit(Ray ray, HitResult& outHitResult) const;
     bool Hit(Ray ray) const;
+    float aaFactor(float x, float y, Plane plane, Camera& camera, float size, int failsafe = 0);
+    unsigned int finalColor(unsigned int color, float aaFactor);
 
     friend std::ostream& operator<<(std::ostream& os, const Plane& p)
     {
@@ -46,6 +48,8 @@ struct Triangle
 
     bool Hit(Ray ray, HitResult& outHitResult) const;
     bool Hit(Ray ray) const;
+    float aaFactor(float x, float y, Triangle triangle, Camera& camera, float size, int failsafe = 0);
+    unsigned int finalColor(unsigned int color, float aaFactor);
 
     friend std::ostream& operator<<(std::ostream& os, const Triangle& t)
     {

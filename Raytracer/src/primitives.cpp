@@ -58,9 +58,7 @@ bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 float Sphere::aaFactor(float x, float y, Sphere sphere, Camera& camera, float size, int failsafe) {
 	int hitSum = 0;
 	if (failsafe >= 2) {
-		// put stuff here
 		Ray ray = camera.ConstructRay(x, y);
-		//std::cout << "big boom" << std::endl;
 		return (float)sphere.Hit(ray);
 	}
 
@@ -71,34 +69,8 @@ float Sphere::aaFactor(float x, float y, Sphere sphere, Camera& camera, float si
 	hits[1] = aaFactor(x + halfSize, y, sphere, camera, halfSize, failsafe + 1);
 	hits[2] = aaFactor(x, y + halfSize, sphere, camera, halfSize, failsafe + 1);
 	hits[3] = aaFactor(x + halfSize, y + halfSize, sphere, camera, halfSize, failsafe + 1);
-	//Ray ray = camera.ConstructRay(x, y); //construct ray on floats
-	//if (sphere.Hit(ray)) {
-	//	hitSum += sphere.Hit(ray);
-	//	aaColor(x, y, sphere, color, camera, halfSize, failsafe + 1);
-	//}
-	//ray = camera.ConstructRay(x + 1, y);
-	//if (sphere.Hit(ray)) {
-	//	hitSum += sphere.Hit(ray);
-	//	aaColor(x, y, sphere, color, camera, halfSize, failsafe + 1);
-	//}
-	//camera.ConstructRay(x, y + 1);
-	//if (sphere.Hit(ray)) {
-	//	hitSum += sphere.Hit(ray);
-	//	aaColor(x, y, sphere, color, camera, halfSize, failsafe + 1);
-	//}
-	//camera.ConstructRay(x + 1, y + 1);
-	//if (sphere.Hit(ray)) {
-	//	hitSum += sphere.Hit(ray);
-	//	aaColor(x, y, sphere, color, camera, halfSize, failsafe + 1);
-	//}
-	// 
-	//perspCameraTarget.ColorAt(x, y) = sphere1.Hit(ray) ? 0xFFFF0000 : 0xFF000000;
-	//float colFactor = (float)colSum / 4.0f;
-	//unsigned char finalAlpha = (0xFF >> 24) * colFactor; // is necessary?
-	//unsigned char finalRed = ((0x00FF0000 >> 16) & 0xFF) * colFactor;
-	//if failsafe == 0 do the color already
 	float sumOfHits = hits[0] + hits[1] + hits[2] + hits[3];
-	//std::cout << sumOfHits / 4.0f << std::endl;
+
 	return sumOfHits / 4.0f;
 }
 
@@ -136,6 +108,38 @@ bool Plane::Hit(Ray ray, HitResult& outHitResult) const
 	float t = Vector3::Dot(toPlanePointFromRayOrigin, normal) / denominator;
 	outHitResult.hitPoint = ray.origin + ray.direction * t;
 	return (t >= 0);
+}
+
+float Plane::aaFactor(float x, float y, Plane plane, Camera& camera, float size, int failsafe) {
+	int hitSum = 0;
+	if (failsafe >= 2) {
+		Ray ray = camera.ConstructRay(x, y);
+		return (float)plane.Hit(ray);
+	}
+
+	float hits[4] = {};
+	float halfSize = size / 2.0f;
+
+	hits[0] = aaFactor(x, y, plane, camera, halfSize, failsafe + 1);
+	hits[1] = aaFactor(x + halfSize, y, plane, camera, halfSize, failsafe + 1);
+	hits[2] = aaFactor(x, y + halfSize, plane, camera, halfSize, failsafe + 1);
+	hits[3] = aaFactor(x + halfSize, y + halfSize, plane, camera, halfSize, failsafe + 1);
+	float sumOfHits = hits[0] + hits[1] + hits[2] + hits[3];
+
+	return sumOfHits / 4.0f;
+}
+
+unsigned int Plane::finalColor(unsigned int color, float aaFactor) {
+	unsigned char r = (color >> 16) & 0xFF;
+	unsigned char g = (color >> 8) & 0xFF;
+	unsigned char b = color & 0xFF;
+
+	unsigned char finalR = (unsigned char)(r * aaFactor);
+	unsigned char finalG = (unsigned char)(g * aaFactor);
+	unsigned char finalB = (unsigned char)(b * aaFactor);
+
+	unsigned int finalColor = (0xFF << 24) | (finalR << 16) | (finalG << 8) | finalB;
+	return finalColor;
 }
 
 bool Triangle::Hit(Ray ray) const
@@ -187,4 +191,36 @@ bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 	outHitResult.hitPoint = intersectionPoint;
 
 	return isInsideTriangle;
+}
+
+float Triangle::aaFactor(float x, float y, Triangle triangle, Camera& camera, float size, int failsafe) {
+	int hitSum = 0;
+	if (failsafe >= 2) {
+		Ray ray = camera.ConstructRay(x, y);
+		return (float)triangle.Hit(ray);
+	}
+
+	float hits[4] = {};
+	float halfSize = size / 2.0f;
+
+	hits[0] = aaFactor(x, y, triangle, camera, halfSize, failsafe + 1);
+	hits[1] = aaFactor(x + halfSize, y, triangle, camera, halfSize, failsafe + 1);
+	hits[2] = aaFactor(x, y + halfSize, triangle, camera, halfSize, failsafe + 1);
+	hits[3] = aaFactor(x + halfSize, y + halfSize, triangle, camera, halfSize, failsafe + 1);
+	float sumOfHits = hits[0] + hits[1] + hits[2] + hits[3];
+
+	return sumOfHits / 4.0f;
+}
+
+unsigned int Triangle::finalColor(unsigned int color, float aaFactor) {
+	unsigned char r = (color >> 16) & 0xFF;
+	unsigned char g = (color >> 8) & 0xFF;
+	unsigned char b = color & 0xFF;
+
+	unsigned char finalR = (unsigned char)(r * aaFactor);
+	unsigned char finalG = (unsigned char)(g * aaFactor);
+	unsigned char finalB = (unsigned char)(b * aaFactor);
+
+	unsigned int finalColor = (0xFF << 24) | (finalR << 16) | (finalG << 8) | finalB;
+	return finalColor;
 }
