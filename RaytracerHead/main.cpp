@@ -116,22 +116,24 @@ void Exercise2()
 
 			// DO Perspective
 			{
-				int colSum = 0;
-				Ray ray = perspCamera.ConstructRay(x, y);
-				colSum += sphere1.Hit(ray);
-				ray = perspCamera.ConstructRay(x + 1, y);
-				colSum += sphere1.Hit(ray);
-				perspCamera.ConstructRay(x, y + 1);
-				colSum += sphere1.Hit(ray);
-				perspCamera.ConstructRay(x+ 1, y + 1);
-				colSum += sphere1.Hit(ray);
-				//perspCameraTarget.ColorAt(x, y) = sphere1.Hit(ray) ? 0xFFFF0000 : 0xFF000000;
-				float colFactor = (float)colSum / 4.0f;
-				unsigned char finalAlpha = (0xFF >> 24) * colFactor; // is necessary?
-				unsigned char finalRed = ((0x00FF0000 >> 16) & 0xFF) * colFactor;
-				perspCameraTarget.ColorAt(x, y) = sphere1.finalColor(0xFFFF0000, sphere1.aaFactor((float)x, (float)y, sphere1, perspCamera, 1.0f));
-				//perspCameraTarget.ColorAt(x, y) = sphere2.Hit(ray) ? 0xFF00FF00 : perspCameraTarget.ColorAt(x, y);
 				perspCameraTarget.ColorAt(x, y) = sphere2.finalColor(0xFFFF0000, sphere2.aaFactor((float)x, (float)y, sphere2, perspCamera, 1.0f));
+
+				unsigned int sphere1Color = sphere1.finalColor(0xFFFF0000, sphere1.aaFactor((float)x, (float)y, sphere1, perspCamera, 1.0f));
+
+				float sphere1Alpha = static_cast<float>((sphere1Color >> 24) & 0xFF) / 255.0f;
+				std::cout << sphere1Alpha << std::endl;
+
+				perspCameraTarget.ColorAt(x, y) = ((unsigned char)(((sphere1Color >> 24) & 0xFF) * sphere1Alpha) << 24) |
+												  ((unsigned char)(((sphere1Color >> 16) & 0xFF) * sphere1Alpha) << 16) |
+												  ((unsigned char)(((sphere1Color >> 8) & 0xFF) * sphere1Alpha) << 8) | 
+												  ((unsigned char)(((sphere1Color) & 0xFF) * sphere1Alpha))
+												  +
+												  ((unsigned char)(((perspCameraTarget.ColorAt(x, y) >> 24) & 0xFF) * perspCameraTarget.ColorAt(x, y)) << 24) |
+												  ((unsigned char)(((perspCameraTarget.ColorAt(x, y) >> 16) & 0xFF) * (1.0f - sphere1Alpha)) << 16) |
+												  ((unsigned char)(((perspCameraTarget.ColorAt(x, y) >> 8) & 0xFF) * (1.0f - sphere1Alpha)) << 8) |
+												  ((unsigned char)(((perspCameraTarget.ColorAt(x, y)) & 0xFF) * (1.0f - sphere1Alpha)));
+
+				
 			}
 		}
 	}
