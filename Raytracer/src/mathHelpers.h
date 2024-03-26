@@ -1,6 +1,6 @@
 #pragma once
 
-float ToCanonicalSpace(int pixelValue, float bufferLimit)
+float ToCanonicalSpace(float pixelValue, float bufferLimit)
 {
     return (pixelValue / (0.5f * bufferLimit)) - 1.0f;
 }

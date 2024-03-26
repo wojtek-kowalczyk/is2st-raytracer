@@ -4,6 +4,7 @@
 #include "ray.h"
 
 #include <ostream>
+#include "camera.h"
 
 struct Sphere
 {
@@ -12,6 +13,8 @@ struct Sphere
 
     bool Hit(Ray ray, HitResult& outHitResult) const;
     bool Hit(Ray ray) const;
+    float aaFactor(float x, float y, Sphere sphere, Camera& camera, float size, int failsafe = 0);
+    unsigned int finalColor(unsigned int color, float aaFactor);
 
     friend std::ostream& operator<<(std::ostream& os, const Sphere& s)
     {

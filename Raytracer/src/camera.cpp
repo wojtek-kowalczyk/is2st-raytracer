@@ -15,7 +15,7 @@ OrthographicCamera::OrthographicCamera(const Vector3& position, const Vector3& f
 { 
 }
 
-Ray OrthographicCamera::ConstructRay(int pixelX, int pixelY) const
+Ray OrthographicCamera::ConstructRay(float pixelX, float pixelY) const
 {
 	float aspectRatio = m_resolutionX / (float)m_resolutionY;
 	float x = ToCanonicalSpace(pixelX, (float)m_resolutionX) * aspectRatio * m_size;
@@ -30,7 +30,7 @@ PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& for
 {
 }
 
-Ray PerspectiveCamera::ConstructRay(int pixelX, int pixelY) const
+Ray PerspectiveCamera::ConstructRay(float pixelX, float pixelY) const
 {
 	float aspectRatio = m_resolutionX / (float)m_resolutionY;
 	const float toRadians = M_PI / 180;
