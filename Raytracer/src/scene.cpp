@@ -18,29 +18,38 @@ void Scene::AddLight(Light* light)
 
 Color Scene::TraceRay(Ray ray) const
 {
-    HitResult closestHit;
+    HitResult rayHit;
 
-    if (GetClosestHit(ray, closestHit))
+    if (GetClosestHit(ray, rayHit))
     {
-        assert(closestHit.color.IsClamped());
+        const Material* objectMaterial = rayHit.material;
+
+        assert(objectMaterial != nullptr);
 
         Color totalLightAccumulation(0, 0, 0, 1.0f);
 
         for (Light* light : m_lights)
         {
 			Vector3 toLight = -light->GetDirection();
-			Ray rayToLight(closestHit.hitPoint + toLight * 0.001f, toLight.Normalized()); // 0.001f to avoid self-shadowing
+			Ray rayToLight(rayHit.hitPoint + toLight * 0.001f, toLight.Normalized()); // 0.001f to avoid self-shadowing
             
             HitResult _; // needn't be closest hit, just any hit
             if (GetClosestHit(rayToLight, _) == false) 
             {
-			    totalLightAccumulation += light->GetColor();
+                float shade = Vector3::Dot(toLight, rayHit.hitNormal);
+                if (shade < 0)
+                {
+                    shade = 0;
+                }
+			    totalLightAccumulation += light->GetColor() * shade;
 			}
 		}
 
         Color light = m_ambientLight + totalLightAccumulation;
 
-        return closestHit.color * light;
+        assert(objectMaterial->color.IsClamped());
+
+        return objectMaterial->color * light;
     }
     else
     {

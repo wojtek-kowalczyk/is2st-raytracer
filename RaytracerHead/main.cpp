@@ -26,10 +26,10 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 			Ray ray3 = camera.ConstructRay((x - 0.5f) + pixelSize * 0.25f, (y - 0.5f) + pixelSize * 0.75f);
 			Ray ray4 = camera.ConstructRay((x - 0.5f) + pixelSize * 0.75f, (y - 0.5f) + pixelSize * 0.75f);
 
-			Color color1 = scene.TraceRay(ray1);
-			Color color2 = scene.TraceRay(ray2);
-			Color color3 = scene.TraceRay(ray3);
-			Color color4 = scene.TraceRay(ray4);
+			Color color1 = scene.TraceRay(ray1).Clamped();
+			Color color2 = scene.TraceRay(ray2).Clamped();
+			Color color3 = scene.TraceRay(ray3).Clamped();
+			Color color4 = scene.TraceRay(ray4).Clamped();
 
 			Color finalColor = (color1 + color2 + color3 + color4) * 0.25f;
 
@@ -42,7 +42,7 @@ int main()
 {
 	Buffer orthoCameraTarget(600, 400);
 	orthoCameraTarget.ClearColor(0xFF000000);
-	Buffer perspCameraTarget(600, 400);
+	Buffer perspCameraTarget(300, 150);
 	perspCameraTarget.ClearColor(0xFF000000);
 
 	OrthographicCamera orthoCamera(Vector3{ 0, 0, 0 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);

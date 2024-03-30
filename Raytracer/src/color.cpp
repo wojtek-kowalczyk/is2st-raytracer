@@ -25,6 +25,15 @@ void Color::Clamp()
 	a = ClampColorChannel(a);
 }
 
+Color Color::Clamped() const
+{
+	return Color(
+		ClampColorChannel(r),
+		ClampColorChannel(g),
+		ClampColorChannel(b),
+		ClampColorChannel(a));
+}
+
 bool Color::IsClamped() const
 {
 	return  r >= 0.0f && r <= 1.0f &&

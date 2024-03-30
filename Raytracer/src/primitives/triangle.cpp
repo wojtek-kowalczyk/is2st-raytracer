@@ -11,8 +11,6 @@ Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3)
 
 bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 {
-	outHitResult.color = m_material->color;
-
 	Vector3 edgeV1V2 = v2 - v1;
 	Vector3 edgeV2V3 = v3 - v2;
 	Vector3 edgeV3V1 = v1 - v3;
@@ -52,6 +50,8 @@ bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 		Vector3::Dot(triangleNormal, cross3) >= 0;
 
 	outHitResult.hitPoint = intersectionPoint;
+	outHitResult.hitNormal = triangleNormal;
+	outHitResult.material = m_material;
 
 	return isInsideTriangle;
 }

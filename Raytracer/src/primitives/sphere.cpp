@@ -6,8 +6,6 @@ Sphere::Sphere(Vector3 center, float radius) : SceneObject(), center(center), ra
 
 bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 {
-	outHitResult.color = m_material->color;
-
 	Vector3 oc = ray.origin - center;
 
 	float a = Vector3::Dot(ray.direction, ray.direction);
@@ -24,11 +22,17 @@ bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 		if (x1 > 0)
 		{
 			outHitResult.hitPoint = ray.origin + ray.direction * x1;
+			outHitResult.hitNormal = (outHitResult.hitPoint - center).Normalized();
+			outHitResult.material = m_material;
+
 			return true;
 		}
 		if (x2 > 0)
 		{
 			outHitResult.hitPoint = ray.origin + ray.direction * x2;
+			outHitResult.hitNormal = (outHitResult.hitPoint - center).Normalized();
+			outHitResult.material = m_material;
+			
 			return true;
 		}
 	}
@@ -39,6 +43,9 @@ bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 		if (x > 0)
 		{
 			outHitResult.hitPoint = ray.origin + ray.direction * x;
+			outHitResult.hitNormal = (outHitResult.hitPoint - center).Normalized();
+			outHitResult.material = m_material;
+
 			return true;
 		}
 	}

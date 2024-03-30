@@ -10,6 +10,7 @@ public:
 	Color(float r, float g, float b, float a = 1.0f);
 
 	void Clamp();
+	Color Clamped() const;
 	bool IsClamped() const;
 
 	static uint32_t ToInt(const Color& color);
