@@ -129,6 +129,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="exampleScenes.cpp" />
+    <ClCompile Include="exampleScenes.h" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

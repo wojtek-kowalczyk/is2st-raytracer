@@ -6,9 +6,8 @@
 #include "vector3.h"
 #include "buffer.h"
 #include "camera.h"
-#include "scene.h"
 
-#include "primitives/sphere.h"
+#include "exampleScenes.h"
 
 void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 {
@@ -18,6 +17,8 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 	{
 		for (int x = 0; x < target.GetWidth() - 1; x++)
 		{
+			// TODO : implement a different antialiasing method
+
 			// Simple 4x antialiasing
 
 			Ray ray1 = camera.ConstructRay((x - 0.5f) + pixelSize * 0.25f, (y - 0.5f) + pixelSize * 0.25f);
@@ -44,17 +45,12 @@ int main()
 	Buffer perspCameraTarget(600, 400);
 	perspCameraTarget.ClearColor(0xFF000000);
 
-	Sphere sphere1(Vector3{ 0, 0, 0 }, 1.0f);
-	sphere1.color = 0xFFFF0000;
-	Sphere sphere2(Vector3{ 1, 0, 0 }, 1.0f);
-	sphere2.color = 0xFF00FF00;
-	Scene scene;
-	scene.AddObject(&sphere1);
-	scene.AddObject(&sphere2);
+	OrthographicCamera orthoCamera(Vector3{ 0, 0, 0 }, Vector3{ 0, 0, 1 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);
+	PerspectiveCamera perspCamera(Vector3{ 0, 0, 0 }, Vector3{ 0, 0, 1 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
 
-	OrthographicCamera orthoCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);
-	PerspectiveCamera perspCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
-
+	//Scene scene = ExampleScenes::CreateCornellBox();
+	Scene scene = ExampleScenes::CreateSimple();
+	
 	RenderScene(scene, orthoCamera, orthoCameraTarget);
 	RenderScene(scene, perspCamera, perspCameraTarget);
 

@@ -5,6 +5,7 @@
 
 #include <math.h>
 #include <cassert>
+#include <iostream>
 
 Vector3::Vector3() 
     : x(0), y(0), z(0)
@@ -87,7 +88,12 @@ Vector3 Vector3::Normalized() const
 float Vector3::Magnitude() const
 {
     float tmp = x*x + y*y + z*z;
-    assert(tmp > 0);
+    assert(tmp >= 0);
+
+    if (tmp == 0)
+    {
+        std::cerr << "[WARNING] Vector3::Magnitude() called on zero vector. Make sure this isn't a mistake.\n";
+    }
 
     return sqrt(tmp);
 }
