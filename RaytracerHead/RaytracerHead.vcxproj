@@ -130,7 +130,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="exampleScenes.cpp" />
-    <ClCompile Include="exampleScenes.h" />
+    <ClInclude Include="exampleScenes.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
