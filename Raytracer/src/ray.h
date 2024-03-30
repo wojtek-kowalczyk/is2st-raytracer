@@ -19,10 +19,7 @@ struct Ray
         : origin(origin), direction(direction)
     {
 	}
-
-    friend std::ostream& operator<<(std::ostream& os, const Ray& r)
-    {
-        os << "Origin: " << r.origin << ", Direction: " << r.direction;
-        return os;
-    }
 };
+
+std::ostream& operator<<(std::ostream& os, const Ray& r);
+

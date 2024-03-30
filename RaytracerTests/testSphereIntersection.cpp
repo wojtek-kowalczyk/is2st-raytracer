@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "primitives.h"
+#include "primitives/sphere.h"
 
 TEST(SphereIntersection, NormalCase)
 {

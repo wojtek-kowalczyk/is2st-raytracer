@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "primitives.h"
+#include "primitives/plane.h"
 
 TEST(PlaneIntersection, RegularCaseHit)
 {

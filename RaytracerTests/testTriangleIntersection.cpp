@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "primitives.h"
+#include "primitives/triangle.h"
 
 TEST(TriangleIntersection, RegularHit)
 {

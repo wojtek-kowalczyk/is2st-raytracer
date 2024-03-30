@@ -2,6 +2,7 @@
 #include "ray.h"
 #include "sceneObject.h"
 #include "vector3.h"
+
 #include <limits>
 
 void Scene::AddObject(SceneObject* object) 

@@ -33,9 +33,9 @@ PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& for
 Ray PerspectiveCamera::ConstructRay(float pixelX, float pixelY) const
 {
 	float aspectRatio = m_resolutionX / (float)m_resolutionY;
-	const float toRadians = M_PI / 180;
-	double Px = ToCanonicalSpace(pixelX, m_resolutionX) * tan(m_degreesFOV / 2 * toRadians) * aspectRatio;
-	double Py = ToCanonicalSpace(pixelY, m_resolutionY) * tan(m_degreesFOV / 2 * toRadians);
+	const float toRadians = (float)M_PI / 180.0f;
+	double Px = ToCanonicalSpace(pixelX, (float)m_resolutionX) * tan(m_degreesFOV / 2 * toRadians) * aspectRatio;
+	double Py = ToCanonicalSpace(pixelY, (float)m_resolutionY) * tan(m_degreesFOV / 2 * toRadians);
 	Vector3 rayDirection = Vector3(Px, Py, m_position.z + 1) - m_position;
 	rayDirection.Normalize();
 
