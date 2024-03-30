@@ -5,6 +5,7 @@
 
 #include <limits>
 #include <cassert>
+#include <math.h>
 
 void Scene::AddObject(SceneObject* object) 
 {
@@ -26,30 +27,55 @@ Color Scene::TraceRay(Ray ray) const
 
         assert(objectMaterial != nullptr);
 
-        Color totalLightAccumulation(0, 0, 0, 1.0f);
+        Color diffuse(0, 0, 0, 1.0f);
+        Color specular(0, 0, 0, 1.0f);
 
         for (Light* light : m_lights)
         {
-			Vector3 toLight = -light->GetDirection();
-			Ray rayToLight(rayHit.hitPoint + toLight * 0.001f, toLight.Normalized()); // 0.001f to avoid self-shadowing
+			Vector3 toLight = -light->GetDirection(rayHit.hitPoint).Normalized();
+			Ray rayToLight(rayHit.hitPoint + rayHit.hitNormal * 0.001f, toLight.Normalized()); // 0.001f to avoid self-shadowing
             
             HitResult _; // needn't be closest hit, just any hit
-            if (GetClosestHit(rayToLight, _) == false) 
+            bool inShadow = GetClosestHit(rayToLight, _);
+
+            if (inShadow)
             {
-                float shade = Vector3::Dot(toLight, rayHit.hitNormal);
-                if (shade < 0)
-                {
-                    shade = 0;
-                }
-			    totalLightAccumulation += light->GetColor() * shade;
+				continue;
 			}
+        
+            // Phong shading
+
+            // compute the diffuse component
+            diffuse += objectMaterial->color * light->GetColor() * fmaxf(0.0f, Vector3::Dot(rayHit.hitNormal, toLight));
+
+            // compute the specular component
+            // what would be the ideal reflection direction for this light ray
+            Vector3 reflected = Vector3::Reflect(-toLight, rayHit.hitNormal);
+            specular += light->GetColor() * pow(fmaxf(0.0f, Vector3::Dot(reflected, -ray.direction)), objectMaterial->specularPow);
 		}
 
-        Color light = m_ambientLight + totalLightAccumulation;
+        /*
+        for (uint32_t i = 0; i < lights.size(); ++i) {
+            Vec3f lightDir, lightIntensity;
+            IsectInfo isectShad;
+            lights[i]->illuminate(hitPoint, lightDir, lightIntensity, isectShad.tNear);
+
+            bool vis = !trace(hitPoint + hitNormal * options.bias, -lightDir, objects, isectShad, kShadowRay);
+                    
+            // compute the diffuse component
+            diffuse += vis * isect.hitObject->albedo * lightIntensity * std::max(0.f, hitNormal.dotProduct(-lightDir));
+                    
+            // compute the specular component
+            // what would be the ideal reflection direction for this light ray
+            Vec3f R = reflect(lightDir, hitNormal);
+            specular += vis * lightIntensity * std::pow(std::max(0.f, R.dotProduct(-dir)), isect.hitObject->n);
+        }
+        */
 
         assert(objectMaterial->color.IsClamped());
+        Color ambient = objectMaterial->color * m_ambientLight;
 
-        return objectMaterial->color * light;
+        return ambient * objectMaterial->Ka + diffuse * objectMaterial->Kd + specular * objectMaterial->Ks;
     }
     else
     {

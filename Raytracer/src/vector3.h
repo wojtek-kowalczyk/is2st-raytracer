@@ -35,6 +35,7 @@ struct Vector3
     float Magnitude() const;
     bool IsNormalized() const;
 
+    static Vector3 Reflect(const Vector3& incident, const Vector3& normal);
     static float Dot(const Vector3& a, const Vector3& b);
     static Vector3 Cross(const Vector3& a, const Vector3& b);
     static float AngleRad(const Vector3& a, const Vector3& b);

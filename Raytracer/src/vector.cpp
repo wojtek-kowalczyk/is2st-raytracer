@@ -108,7 +108,15 @@ bool Vector3::IsNormalized() const
     return Magnitude() - 1.0f < 0.0001f;
 }
 
-float Vector3::Dot(const Vector3& a, const Vector3& b) 
+Vector3 Vector3::Reflect(const Vector3& incident, const Vector3& normal)
+{
+    assert(normal.IsNormalized());
+
+    return incident - normal * Vector3::Dot(incident, normal) * 2.0f;
+    
+}
+
+float Vector3::Dot(const Vector3& a, const Vector3& b)
 {
     return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
 }

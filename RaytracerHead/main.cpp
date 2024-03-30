@@ -42,7 +42,7 @@ int main()
 {
 	Buffer orthoCameraTarget(600, 400);
 	orthoCameraTarget.ClearColor(0xFF000000);
-	Buffer perspCameraTarget(300, 150);
+	Buffer perspCameraTarget(600, 400);
 	perspCameraTarget.ClearColor(0xFF000000);
 
 	OrthographicCamera orthoCamera(Vector3{ 0, 0, 0 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);

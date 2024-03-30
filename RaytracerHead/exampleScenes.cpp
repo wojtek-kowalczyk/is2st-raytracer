@@ -5,8 +5,10 @@
 
 Scene ExampleScenes::CreateSimple()
 {
-	Material* redMaterial = new Material{ Color(1, 0, 0, 1.0f) };
-	Material* greenMaterial = new Material{ Color(0, 1, 0, 1.0f) };
+	Material* redMaterial = Material::Default();
+	redMaterial->color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+	Material* greenMaterial = Material::Default();
+	greenMaterial->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 
 	Scene scene;
 
@@ -18,7 +20,8 @@ Scene ExampleScenes::CreateSimple()
 	plane->SetMaterial(greenMaterial);
 	scene.AddObject(plane);
 
-	DirectionalLight* directionalLight = new DirectionalLight(Color(1.0f, 1.0f, 1.0f), Vector3{ -1, -1, 0.8f });
+	//DirectionalLight* directionalLight = new DirectionalLight(Color(1.0f, 1.0f, 1.0f), Vector3{ -1, -1, 0.8f });
+	PointLight* directionalLight = new PointLight(Color(1.0f, 1.0f, 1.0f), Vector3{ 1, 2, 1 });
 	scene.AddLight(directionalLight);
 
 	// TODO : we're leaking memory here, the Scene Objects aren't deallocated.
