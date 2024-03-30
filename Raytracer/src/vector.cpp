@@ -61,6 +61,11 @@ Vector3 Vector3::operator/(float scalar) const
 	return result;
 }
 
+Vector3 Vector3::operator-() const
+{
+    return Vector3(-x, -y, -z);
+}
+
 std::ostream& operator<<(std::ostream& os, const Vector3& v) 
 {
     os << '(' << v.x << ", " << v.y << ", " << v.z << ')';

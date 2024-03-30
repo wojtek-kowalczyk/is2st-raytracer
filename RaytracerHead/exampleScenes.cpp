@@ -1,21 +1,25 @@
 #include "exampleScenes.h"
 
+#include "material.h"
+#include "color.h"
+
 Scene ExampleScenes::CreateSimple()
 {
+	Material* redMaterial = new Material{ Color(1, 0, 0, 1.0f) };
+	Material* greenMaterial = new Material{ Color(0, 1, 0, 1.0f) };
+
 	Scene scene;
 
 	Sphere* sphere = new Sphere(Vector3{ 0, 0, 4 }, 1);
-	sphere->color = 0xFFff0000;
+	sphere->SetMaterial(redMaterial);
 	scene.AddObject(sphere);
 
 	Plane* plane = new Plane(Vector3{ 0, -1, 0 }, Vector3{ 0, 1, 0 });
-	plane->color = 0xFF00ff00;
+	plane->SetMaterial(greenMaterial);
 	scene.AddObject(plane);
 
-	// TODO : put light at this sphere
-	Sphere* lightSphere = new Sphere(Vector3{ 1, 2, 1 }, 0.1f);
-	lightSphere->color = 0xFFFFFFFF;
-	scene.AddObject(lightSphere);
+	DirectionalLight* directionalLight = new DirectionalLight(Color(1.0f, 1.0f, 1.0f), Vector3{ -1, -1, 0.8f });
+	scene.AddLight(directionalLight);
 
 	// TODO : we're leaking memory here, the Scene Objects aren't deallocated.
 
@@ -24,6 +28,7 @@ Scene ExampleScenes::CreateSimple()
 
 Scene ExampleScenes::CreateCornellBox()
 {
+#if 0
 	Scene scene;
 
 	Plane* floor = new Plane(Vector3{ 0, -1, 0 }, Vector3{ 0, 1, 0 });
@@ -70,4 +75,6 @@ Scene ExampleScenes::CreateCornellBox()
 	// TODO : we're leaking memory here, the Scene Objects aren't deallocated.
 
 	return scene;
+#endif
+	return Scene();
 }

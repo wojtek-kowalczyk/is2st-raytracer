@@ -33,6 +33,8 @@
     <ClInclude Include="src\buffer.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\color.h" />
+    <ClInclude Include="src\light.h" />
+    <ClInclude Include="src\material.h" />
     <ClInclude Include="src\mathHelpers.h" />
     <ClInclude Include="src\primitives\plane.h" />
     <ClInclude Include="src\primitives\triangle.h" />

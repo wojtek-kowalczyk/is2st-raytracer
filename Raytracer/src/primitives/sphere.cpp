@@ -6,7 +6,7 @@ Sphere::Sphere(Vector3 center, float radius) : SceneObject(), center(center), ra
 
 bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 {
-	outHitResult.color = this->color;
+	outHitResult.color = m_material->color;
 
 	Vector3 oc = ray.origin - center;
 

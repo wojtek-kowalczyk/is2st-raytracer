@@ -1,13 +1,14 @@
 #pragma once
 
 #include "vector3.h"
+#include "color.h"
+
 #include <cstdint>
 
 struct HitResult
 {
     Vector3 hitPoint {0, 0, 0};
-    uint32_t color = 0; // TODO : temporary implementation, ideally pass reference to the hit obj to get its material
-    // SceneObject* hitObject; // TODO : object lifetime - care for invalid pointer
+    Color color = Color(0, 0, 0, 1.0f); // TODO : maybe give scene object? and take material and color from it.
 };
 
 struct Ray

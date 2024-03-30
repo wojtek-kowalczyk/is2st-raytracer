@@ -17,6 +17,22 @@ static float ClampColorChannel(float value)
 	return fmin(fmax(value, 0.0f), 1.0f);
 }
 
+void Color::Clamp()
+{
+	r = ClampColorChannel(r);
+	g = ClampColorChannel(g);
+	b = ClampColorChannel(b);
+	a = ClampColorChannel(a);
+}
+
+bool Color::IsClamped() const
+{
+	return  r >= 0.0f && r <= 1.0f &&
+			g >= 0.0f && g <= 1.0f &&
+			b >= 0.0f && b <= 1.0f &&
+			a >= 0.0f && a <= 1.0f;
+}
+
 uint32_t Color::ToInt(const Color& color)
 {
 	uint8_t r = (uint8_t)(ClampColorChannel(color.r) * 255.0f);
@@ -48,9 +64,44 @@ Color Color::operator+(const Color& other) const
 	return Color(r + other.r, g + other.g, b + other.b, a + other.a);
 }
 
+Color Color::operator*(const Color& other) const
+{
+	return Color(r * other.r, g * other.g, b * other.b, a * other.a);
+}
+
 Color Color::operator*(float scalar) const
 {
 	return Color(r * scalar, g * scalar, b * scalar, a * scalar);
+}
+
+Color& Color::operator+=(const Color& other)
+{
+	r += other.r;
+	g += other.g;
+	b += other.b;
+	a += other.a;
+
+	return *this;
+}
+
+Color& Color::operator*=(const Color& other)
+{
+	r *= other.r;
+	g *= other.g;
+	b *= other.b;
+	a *= other.a;
+
+	return *this;
+}
+
+Color& Color::operator*=(float scalar)
+{
+	r *= scalar;
+	g *= scalar;
+	b *= scalar;
+	a *= scalar;
+
+	return *this;
 }
 
 std::ostream& operator<<(std::ostream& os, const Color& color)

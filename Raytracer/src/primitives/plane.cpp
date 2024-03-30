@@ -14,7 +14,7 @@ bool Plane::Hit(Ray ray, HitResult& outHitResult) const
 	assert(normal.IsNormalized());
 	assert(ray.direction.IsNormalized());
 
-	outHitResult.color = this->color;
+	outHitResult.color = m_material->color;
 
 	float denominator = Vector3::Dot(normal, ray.direction);
 	if (fabs(denominator) < 0.000001f) // if denom is zero, the ray is parallel

@@ -2,15 +2,18 @@
 
 #include "vector3.h"
 #include "ray.h"
+#include "material.h"
+
 #include <cstdint>
 
 class SceneObject 
 {
 public:
     virtual bool Hit(Ray ray, HitResult& outHitResult) const = 0;
-    uint32_t color; // TODO : TMP - switch to materials later
-    
     virtual bool Hit(Ray ray) const = 0;
 
-private:
+    void SetMaterial(Material* material) { m_material = material; }
+
+protected:
+    Material* m_material;
 };

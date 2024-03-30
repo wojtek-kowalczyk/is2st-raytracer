@@ -11,7 +11,7 @@ Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3)
 
 bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 {
-	outHitResult.color = this->color;
+	outHitResult.color = m_material->color;
 
 	Vector3 edgeV1V2 = v2 - v1;
 	Vector3 edgeV2V3 = v3 - v2;
