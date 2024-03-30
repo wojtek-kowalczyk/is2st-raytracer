@@ -18,9 +18,5 @@ struct Triangle : public SceneObject
     bool Hit(Ray ray, HitResult& outHitResult) const override;
     bool Hit(Ray ray) const override;
 
-    float aaFactor(float x, float y, Triangle triangle, Camera& camera, float size, int failsafe = 0);
-    unsigned int finalColor(unsigned int color, float aaFactor);
-
-
     friend std::ostream& operator<<(std::ostream& os, const Triangle& t);
 };

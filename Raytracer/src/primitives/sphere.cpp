@@ -52,6 +52,12 @@ bool Sphere::Hit(Ray ray) const
 	return Hit(ray, _);
 }
 
+// TODO : PIOTR
+// This is left for reference to implement adaptive anti-aliasing using the new system.
+// After that's done, please remove this code.
+
+#if 0 
+
 float Sphere::aaFactor(float x, float y, Sphere sphere, Camera& camera, float size, int failsafe)
 {
 	int hitSum = 0;
@@ -88,6 +94,7 @@ unsigned int Sphere::finalColor(unsigned int color, float aaFactor)
 	unsigned int finalColor = (finalAlpha << 24) | (finalR << 16) | (finalG << 8) | finalB;
 	return finalColor;
 }
+#endif
 
 std::ostream& operator<<(std::ostream& os, const Sphere& s)
 {
