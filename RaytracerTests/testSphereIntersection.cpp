@@ -29,7 +29,7 @@ TEST(SphereIntersection, StartAtEdge)
 TEST(SphereIntersection, StartRightBeforeEdge)
 {
 	Sphere sphere{ Vector3(0, 0, 3), 1 };
-	Ray ray{ Vector3(0, 0, 3.999), Vector3(0, 0, 1) };
+	Ray ray{ Vector3(0, 0, 3.999f), Vector3(0, 0, 1) };
 
 	EXPECT_EQ(sphere.Hit(ray), true);
 }
@@ -45,7 +45,7 @@ TEST(SphereIntersection, HitEdge)
 TEST(SphereIntersection, MissEdge)
 {
 	Sphere sphere{ Vector3(0, 0, 3), 1 };
-	Ray ray{ Vector3(1.01, 0, 0), Vector3(0, 0, 1) };
+	Ray ray{ Vector3(1.01f, 0, 0), Vector3(0, 0, 1) };
 
 	EXPECT_EQ(sphere.Hit(ray), false);
 }
@@ -53,7 +53,7 @@ TEST(SphereIntersection, MissEdge)
 TEST(SphereIntersection, HitNearEdge)
 {
 	Sphere sphere{ Vector3(0, 0, 3), 1 };
-	Ray ray{ Vector3(0.99, 0, 0), Vector3(0, 0, 1) };
+	Ray ray{ Vector3(0.99f, 0, 0), Vector3(0, 0, 1) };
 
 	EXPECT_EQ(sphere.Hit(ray), true);
 }

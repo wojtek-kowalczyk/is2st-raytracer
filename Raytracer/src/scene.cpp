@@ -10,6 +10,18 @@ void Scene::AddObject(SceneObject* object)
     m_objects.push_back(object);
 }
 
+Color Scene::TraceRay(Ray ray) const
+{
+    HitResult closestHit;
+
+    if (GetClosestHit(ray, closestHit))
+    {
+        return Color::FromInt(closestHit.color); // TODO : this color passing is awkward, better would be hit->object->material->color
+    }
+
+    else return Color(0, 0, 0, 1.0f);
+}
+
 bool Scene::GetClosestHit(Ray ray, HitResult& outHitResult) const 
 {
     HitResult closestHit;

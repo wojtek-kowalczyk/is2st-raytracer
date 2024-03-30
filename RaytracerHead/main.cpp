@@ -23,11 +23,13 @@
 void Exercise2()
 {
 	Buffer orthoCameraTarget(600, 400);
+	orthoCameraTarget.ClearColor(0xFF000000);
 	Buffer perspCameraTarget(600, 400);
+	perspCameraTarget.ClearColor(0xFF000000);
 
 	Sphere sphere1(Vector3{ 0, 0, 0 }, 1.0f);
 	sphere1.color = 0xFFFF0000;
-	Sphere sphere2(Vector3{ 1, 0, 5 }, 1.0f);
+	Sphere sphere2(Vector3{ 1, 0, 0 }, 1.0f);
 	sphere2.color = 0xFF00FF00;
 	Scene scene;
 	scene.AddObject(&sphere1);
@@ -36,18 +38,27 @@ void Exercise2()
 	OrthographicCamera orthoCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);
 	PerspectiveCamera perspCamera(Vector3{ 0, 0, -5 }, Vector3{ 0, 0, 1 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
 	
+	const float pixelSize = 1.0f;
+
 	for (int y = 0; y < orthoCameraTarget.GetHeight() - 1; y++)
 	{
 		for (int x = 0; x < orthoCameraTarget.GetWidth() - 1; x++)
 		{
 			// DO othrographic
 			{
-				Ray ray = orthoCamera.ConstructRay(x, y);
-				HitResult closestHit;
-				if (scene.GetClosestHit(ray, closestHit)) 
-				{
-					orthoCameraTarget.ColorAt(x, y) = closestHit.color; // TODO : this color passing is awkward, better would be hit->object->material->color
-				}
+				Ray ray1 = orthoCamera.ConstructRay(x + pixelSize * 0.25f - 0.5f, y + pixelSize * 0.25f - 0.5f);
+				Ray ray2 = orthoCamera.ConstructRay(x + pixelSize * 0.75f - 0.5f, y + pixelSize * 0.25f - 0.5f);
+				Ray ray3 = orthoCamera.ConstructRay(x + pixelSize * 0.25f - 0.5f, y + pixelSize * 0.75f - 0.5f);
+				Ray ray4 = orthoCamera.ConstructRay(x + pixelSize * 0.75f - 0.5f, y + pixelSize * 0.75f - 0.5f);
+
+				Color color1 = scene.TraceRay(ray1);
+				Color color2 = scene.TraceRay(ray2);
+				Color color3 = scene.TraceRay(ray3);
+				Color color4 = scene.TraceRay(ray4);
+
+				Color finalColor = (color1 + color2 + color3 + color4) * 0.25f;
+
+				orthoCameraTarget.ColorAt(x, y) = Color::ToInt(finalColor);
 			}
 
 #if 0 // TMP disabled

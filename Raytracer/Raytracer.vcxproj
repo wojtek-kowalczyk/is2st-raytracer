@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\buffer.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\color.cpp" />
     <ClCompile Include="src\primitives\plane.cpp" />
     <ClCompile Include="src\primitives\triangle.cpp" />
     <ClCompile Include="src\ray.cpp" />
@@ -31,6 +32,7 @@
   <ItemGroup>
     <ClInclude Include="src\buffer.h" />
     <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\color.h" />
     <ClInclude Include="src\mathHelpers.h" />
     <ClInclude Include="src\primitives\plane.h" />
     <ClInclude Include="src\primitives\triangle.h" />

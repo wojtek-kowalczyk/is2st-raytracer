@@ -3,6 +3,7 @@
 #include "vector3.h"
 #include "ray.h"
 #include "sceneObject.h"
+#include "color.h"
 
 #include <vector>
 
@@ -12,8 +13,9 @@ class Scene
 {
 public:
     void AddObject(SceneObject* object);
-    bool GetClosestHit(Ray ray, HitResult& outHitResult) const;
+    Color TraceRay(Ray ray) const;
 
 private:
+    bool GetClosestHit(Ray ray, HitResult& outHitResult) const;
     std::vector<SceneObject*> m_objects;
 };
