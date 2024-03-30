@@ -9,10 +9,10 @@ public:
 	virtual Ray ConstructRay(float pixelX, float pixelY) const = 0;
 
 protected:
-	Camera(const Vector3& position, const Vector3& forward, int resolutionX, int resolutionY);
+	Camera(const Vector3& position, int resolutionX, int resolutionY);
 
 	Vector3 m_position;
-	Vector3 m_forward;
+	const Vector3 m_forward = Vector3(0,0,1); // For now rotating of the camera is unsupported.
 	int m_resolutionX;
 	int m_resolutionY;
 };
@@ -20,7 +20,7 @@ protected:
 class OrthographicCamera : public Camera
 {
 public:
-	OrthographicCamera(const Vector3& position, const Vector3& forward, int resolutionX, int resolutionY, float size);
+	OrthographicCamera(const Vector3& position, int resolutionX, int resolutionY, float size);
 	virtual Ray ConstructRay(float pixelX, float pixelY) const override;
 
 private:
@@ -30,7 +30,7 @@ private:
 class PerspectiveCamera : public Camera
 {
 public:
-	PerspectiveCamera(const Vector3& position, const Vector3& forward, int resolutionX, int resolutionY, float fov = 45.0f);
+	PerspectiveCamera(const Vector3& position, int resolutionX, int resolutionY, float fov = 45.0f);
 	virtual Ray ConstructRay(float pixelX, float pixelY) const override;
 
 private:

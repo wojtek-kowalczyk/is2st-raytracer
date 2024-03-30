@@ -5,13 +5,13 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-Camera::Camera(const Vector3& position, const Vector3& forward, int resolutionX, int resolutionY)
-	: m_position(position), m_forward(forward), m_resolutionX(resolutionX), m_resolutionY(resolutionY)
+Camera::Camera(const Vector3& position, int resolutionX, int resolutionY)
+	: m_position(position), m_resolutionX(resolutionX), m_resolutionY(resolutionY)
 {
 }
 
-OrthographicCamera::OrthographicCamera(const Vector3& position, const Vector3& forward, int resolutionX, int resolutionY, float size)
-	: Camera(position, forward, resolutionX, resolutionY), m_size(size)
+OrthographicCamera::OrthographicCamera(const Vector3& position, int resolutionX, int resolutionY, float size)
+	: Camera(position, resolutionX, resolutionY), m_size(size)
 { 
 }
 
@@ -25,8 +25,8 @@ Ray OrthographicCamera::ConstructRay(float pixelX, float pixelY) const
 	return ray;
 }
 
-PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& forward, int resolutionX, int resolutionY, float fov)
-	: Camera(position, forward, resolutionX, resolutionY), m_degreesFOV(fov)
+PerspectiveCamera::PerspectiveCamera(const Vector3& position, int resolutionX, int resolutionY, float fov)
+	: Camera(position, resolutionX, resolutionY), m_degreesFOV(fov)
 {
 }
 
