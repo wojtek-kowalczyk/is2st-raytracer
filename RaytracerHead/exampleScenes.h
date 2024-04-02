@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene.h"
+#include "scene.h"
 
 #include "primitives/sphere.h"
 #include "primitives/plane.h"

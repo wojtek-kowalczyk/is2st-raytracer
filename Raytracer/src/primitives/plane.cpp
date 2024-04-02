@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include "../ray.h"
-
+#include <math.h>
 Plane::Plane(Vector3 point, Vector3 normal):
 	point(point), normal(normal)
 {
