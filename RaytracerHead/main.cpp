@@ -9,6 +9,28 @@
 
 #include "exampleScenes.h"
 
+Color antialias(int x, int y, const Scene& scene, const Camera& camera, float pixelSize, int threshold = 0) {
+
+	if (threshold >=2) {
+		Ray ray = camera.ConstructRay(x, y);
+		Color color = scene.TraceRay(ray).Clamped();
+		return color;
+	}
+	else {
+		float halfSize = pixelSize / 2;
+
+		Color color1 = antialias(x - halfSize, y - halfSize, scene, camera, halfSize, threshold + 1);
+		Color color2 = antialias(x + halfSize, y - halfSize, scene, camera, halfSize, threshold + 1);
+		Color color3 = antialias(x - halfSize, y + halfSize, scene, camera, halfSize, threshold + 1);
+		Color color4 = antialias(x + halfSize, y + halfSize, scene, camera, halfSize, threshold + 1);
+		
+
+		Color finalColor = (color1 + color2 + color3 + color4) * 0.25f;
+
+		return finalColor;
+	}
+}
+
 void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 {
 	const float pixelSize = 1.0f;
@@ -17,26 +39,16 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 	{
 		for (int x = 0; x < target.GetWidth() - 1; x++)
 		{
-			// TODO : implement a different antialiasing method
 
-			// Simple 4x antialiasing
-
-			Ray ray1 = camera.ConstructRay((x - 0.5f) + pixelSize * 0.25f, (y - 0.5f) + pixelSize * 0.25f);
-			Ray ray2 = camera.ConstructRay((x - 0.5f) + pixelSize * 0.75f, (y - 0.5f) + pixelSize * 0.25f);
-			Ray ray3 = camera.ConstructRay((x - 0.5f) + pixelSize * 0.25f, (y - 0.5f) + pixelSize * 0.75f);
-			Ray ray4 = camera.ConstructRay((x - 0.5f) + pixelSize * 0.75f, (y - 0.5f) + pixelSize * 0.75f);
-
-			Color color1 = scene.TraceRay(ray1).Clamped();
-			Color color2 = scene.TraceRay(ray2).Clamped();
-			Color color3 = scene.TraceRay(ray3).Clamped();
-			Color color4 = scene.TraceRay(ray4).Clamped();
-
-			Color finalColor = (color1 + color2 + color3 + color4) * 0.25f;
-
+			// Hit(ray) portion
+			Color finalColor = antialias(x, y, scene, camera, 1.0f, pixelSize);
 			target.ColorAt(x, y) = Color::ToInt(finalColor);
+			//
 		}
 	}
 }
+
+
 
 int main()
 {
