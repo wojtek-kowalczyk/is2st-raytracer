@@ -1,4 +1,5 @@
 #include "sphere.h"
+#include "math.h"
 
 Sphere::Sphere(Vector3 center, float radius) : SceneObject(), center(center), radius(radius)
 {
