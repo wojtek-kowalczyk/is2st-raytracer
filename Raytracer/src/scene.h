@@ -10,9 +10,9 @@
 
 // TODO : sort out ownership of objects. Should the scene own them, or should it just reference them? heap vs stack?
 
+
 class Scene 
 {
-
 public:
     void AddObject(SceneObject* object);
     void AddLight(Light* light);
@@ -20,6 +20,8 @@ public:
 
 private:
     static constexpr int BOUNCES = 4;
+    static constexpr Color BACKGROUND_COLOR = Color( 0.0f, 0.0f, 0.0f, 1.0f );
+    static constexpr Color ERROR_COLOR = Color(1.0f, 0.0f, 1.0f, 1.0f);
 
     Color TraceRay(Ray ray, int ttl) const;
     bool GetClosestHit(Ray ray, HitResult& outHitResult) const;

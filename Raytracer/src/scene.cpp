@@ -30,7 +30,7 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
     for (Light* light : m_lights)
     {
         Vector3 toLight = -light->GetDirection(rayHit.hitPoint).Normalized();
-        Ray rayToLight(rayHit.hitPoint + rayHit.hitNormal * 0.001f, toLight.Normalized()); // 0.001f to avoid self-shadowing
+        Ray rayToLight(rayHit.hitPoint + rayHit.hitNormal * 0.01f, toLight.Normalized()); // 0.001f to avoid self-shadowing
         
         HitResult _; // needn't be closest hit, just any hit
         bool inShadow = GetClosestHit(rayToLight, _);
@@ -65,8 +65,7 @@ Color Scene::TraceRay(Ray ray, int ttl) const
 {
     if (ttl <= 0) 
     {
-        // ERROR COLOR
-        return Color{1, 0, 1, 1.0f};
+        return ERROR_COLOR;
     }
 
     HitResult rayHit;
@@ -99,8 +98,7 @@ Color Scene::TraceRay(Ray ray, int ttl) const
         }
     }
     {
-        //BACKGROUND COLOR
-        return Color(0.5, 0.5, 0.5, 1.0f);
+        return BACKGROUND_COLOR;
     }
 }
 

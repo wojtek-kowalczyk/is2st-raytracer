@@ -47,16 +47,11 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 	{
 		for (int x = 0; x < target.GetWidth() - 1; x++)
 		{
-
-			// Hit(ray) portion
 			Color finalColor = antialias((float)x, (float)y, scene, camera, pixelSize, 0, true);
 			target.ColorAt(x, y) = Color::ToInt(finalColor);
-			//
-		}
+		}	
 	}
 }
-
-
 
 int main()
 {
@@ -68,8 +63,8 @@ int main()
 	OrthographicCamera orthoCamera(Vector3{ 0, 0, 0 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);
 	PerspectiveCamera perspCamera(Vector3{ 0, 0, 0 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
 
-	//Scene scene = ExampleScenes::CreateCornellBox();
-	Scene scene = ExampleScenes::CreateSimple();
+	Scene scene = ExampleScenes::CreateCornellBox();
+	//Scene scene = ExampleScenes::CreateSimple();
 	
 	//RenderScene(scene, orthoCamera, orthoCameraTarget);
 	RenderScene(scene, perspCamera, perspCameraTarget);
