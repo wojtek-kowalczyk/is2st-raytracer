@@ -9,19 +9,27 @@
 
 #include "exampleScenes.h"
 
-Color antialias(int x, int y, const Scene& scene, const Camera& camera, float pixelSize, int threshold = 0) {
+Color antialias(float x, float y, const Scene& scene, const Camera& camera, float pixelSize, int threshold = 0, bool force = false) {
 
-	if (threshold >=2) {
-		Ray ray = camera.ConstructRay(x, y);
-		Color color = scene.TraceRay(ray).Clamped();
-		return color;
+	if (threshold >=2 || force) {
+		Ray ray1 = camera.ConstructRay(x, y);
+		Ray ray2 = camera.ConstructRay(x + pixelSize, y);
+		Ray ray3 = camera.ConstructRay(x, y + pixelSize);
+		Ray ray4 = camera.ConstructRay(x + pixelSize, y + pixelSize);
+		Color color1 = scene.TraceRay(ray1).Clamped();
+		Color color2 = scene.TraceRay(ray1).Clamped();
+		Color color3 = scene.TraceRay(ray1).Clamped();
+		Color color4 = scene.TraceRay(ray1).Clamped();
+		Color finalColor = (color1 + color2 + color3 + color4) * 0.25f;
+
+		return finalColor;
 	}
 	else {
-		float halfSize = pixelSize / 2;
+		float halfSize = pixelSize / 2.0f;
 
-		Color color1 = antialias(x - halfSize, y - halfSize, scene, camera, halfSize, threshold + 1);
-		Color color2 = antialias(x + halfSize, y - halfSize, scene, camera, halfSize, threshold + 1);
-		Color color3 = antialias(x - halfSize, y + halfSize, scene, camera, halfSize, threshold + 1);
+		Color color3 = antialias(x, y, scene, camera, halfSize, threshold + 1);
+		Color color1 = antialias(x + halfSize, y, scene, camera, halfSize, threshold + 1);
+		Color color2 = antialias(x, y + halfSize, scene, camera, halfSize, threshold + 1);
 		Color color4 = antialias(x + halfSize, y + halfSize, scene, camera, halfSize, threshold + 1);
 		
 
@@ -41,7 +49,7 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 		{
 
 			// Hit(ray) portion
-			Color finalColor = antialias(x, y, scene, camera, 1.0f, pixelSize);
+			Color finalColor = antialias((float)x, (float)y, scene, camera, pixelSize, 0, false);
 			target.ColorAt(x, y) = Color::ToInt(finalColor);
 			//
 		}
