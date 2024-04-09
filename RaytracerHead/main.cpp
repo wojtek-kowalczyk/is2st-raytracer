@@ -49,7 +49,7 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 		{
 
 			// Hit(ray) portion
-			Color finalColor = antialias((float)x, (float)y, scene, camera, pixelSize, 0, false);
+			Color finalColor = antialias((float)x, (float)y, scene, camera, pixelSize, 0, true);
 			target.ColorAt(x, y) = Color::ToInt(finalColor);
 			//
 		}

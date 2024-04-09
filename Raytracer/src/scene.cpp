@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "material.h"
 #include "ray.h"
 #include "sceneObject.h"
 #include "vector3.h"
@@ -21,6 +22,8 @@ void Scene::AddLight(Light* light)
 
 Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const
 {
+    assert(objectMaterial->type == MaterialType::Diffuse);
+
     Color diffuse(0, 0, 0, 1.0f);
     Color specular(0, 0, 0, 1.0f);
 
@@ -52,8 +55,20 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
     return ambient * objectMaterial->Ka + diffuse * objectMaterial->Kd + specular * objectMaterial->Ks;
 }
 
-Color Scene::TraceRay(Ray ray) const
+Color Scene::HandleReflective(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const
 {
+    // TODO
+    return Color {1.0f,1,1,1};
+}
+
+Color Scene::TraceRay(Ray ray, int ttl) const
+{
+    if (ttl <= 0) 
+    {
+        // ERROR COLOR
+        return Color{1, 0, 1, 1.0f};
+    }
+
     HitResult rayHit;
 
     if (GetClosestHit(ray, rayHit))
@@ -68,17 +83,30 @@ Color Scene::TraceRay(Ray ray) const
             return HandleDiffuse(objectMaterial, ray, rayHit);
 
         case MaterialType::Reflective:
+        {
+            // ray hit a reflective surface. Compute a reflection ray and trace it again.
+            Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized();
+            Vector3 reflectedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f);
+            Ray reflectedRay = Ray(reflectedRayOrigin, reflectedRayDirection);
+            return TraceRay(reflectedRay, ttl - 1);
+        }
+
         case MaterialType::Transmissive:
         default:
             std::cerr << "Unhandled switch case\n";
             abort();
+            break;
         }
-
     }
-    else
     {
-        return Color(0, 0, 0, 1.0f);
+        //BACKGROUND COLOR
+        return Color(0.5, 0.5, 0.5, 1.0f);
     }
+}
+
+Color Scene::TraceRay(Ray ray) const
+{
+    return TraceRay(ray, BOUNCES);
 }
 
 bool Scene::GetClosestHit(Ray ray, HitResult& outHitResult) const 
