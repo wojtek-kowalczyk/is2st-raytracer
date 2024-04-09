@@ -19,6 +19,7 @@ public:
 
 private:
     bool GetClosestHit(Ray ray, HitResult& outHitResult) const;
+    Color HandleDiffuse(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const;
     std::vector<SceneObject*> m_objects;
     std::vector<Light*> m_lights;
 
