@@ -113,7 +113,34 @@ Vector3 Vector3::Reflect(const Vector3& incident, const Vector3& normal)
     assert(normal.IsNormalized());
 
     return incident - normal * Vector3::Dot(incident, normal) * 2.0f;
-    
+}
+
+// Source https://stackoverflow.com/questions/29758545/how-to-find-refraction-vector-from-incoming-vector-and-surface-normal
+bool Vector3::Refract(const Vector3& incident, const Vector3& normal, float ior, Vector3& outRefractedVector) 
+{
+    const float n = ior;
+    const float cosI = abs(Vector3::Dot(normal, incident));
+    const float sinT2 = n * n * (1.0 - cosI * cosI);
+    if (sinT2 > 1.0) 
+    {
+        outRefractedVector = Vector3(0,0,0);
+        return false; // Total Internal Reflection
+    }
+    const float cosT = sqrt(1.0 - sinT2);
+
+    outRefractedVector = (incident * n) + normal * (n * cosI - cosT);
+    return true; // OK reflection
+
+    // Vector3 i = incident.Normalized();
+    // Vector3 n = normal.Normalized();
+    // float r = 1.0f/ior;
+    // float c = Vector3::Dot(-n, i);
+
+    // float tmp = (r*r)*(1-(c*c));
+    // outRefractedVector = i * r + n * (r*c - sqrt(1-tmp));
+    // std::cout << outRefractedVector << '\n';
+
+    return true;
 }
 
 float Vector3::Dot(const Vector3& a, const Vector3& b)

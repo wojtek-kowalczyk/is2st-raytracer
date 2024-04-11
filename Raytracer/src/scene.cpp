@@ -64,6 +64,7 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
 Color Scene::HandleReflective(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const
 {
     // TODO
+    assert(false);
     return Color {1.0f,1,1,1};
 }
 
@@ -71,7 +72,7 @@ Color Scene::TraceRay(Ray ray, int ttl) const
 {
     if (ttl <= 0) 
     {
-        return ERROR_COLOR;
+        return OUT_OF_BOUNCES_COLOR;
     }
 
     HitResult rayHit;
@@ -79,7 +80,6 @@ Color Scene::TraceRay(Ray ray, int ttl) const
     if (GetClosestHit(ray, rayHit, _))
     {
         const Material* objectMaterial = rayHit.material;
-
         assert(objectMaterial != nullptr);
 
         switch (objectMaterial->type)
@@ -91,12 +91,22 @@ Color Scene::TraceRay(Ray ray, int ttl) const
         {
             // ray hit a reflective surface. Compute a reflection ray and trace it again.
             Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized();
-            Vector3 reflectedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f);
+            Vector3 reflectedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f); // TODO : consider the case when the plane is hit from the back, hitnormal will be wrong then.
             Ray reflectedRay = Ray(reflectedRayOrigin, reflectedRayDirection);
             return TraceRay(reflectedRay, ttl - 1);
         }
 
-        case MaterialType::Transmissive:
+        case MaterialType::Refractive:
+        {
+            // ray hit a refractive surface. Compute a reflection ray and trace it again.
+            const float waterIOR = 1.33f; // TODO : move out
+            Vector3 refractedRayDirection;
+            bool reflected = Vector3::Refract(ray.direction, rayHit.hitNormal, waterIOR, refractedRayDirection);
+            if (!reflected) return OUT_OF_BOUNCES_COLOR;
+            Vector3 refractedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f);
+            Ray refractedRay = Ray(refractedRayOrigin, refractedRayDirection.Normalized());
+            return TraceRay(refractedRay, ttl - 1);
+        }
         default:
             std::cerr << "Unhandled switch case\n";
             abort();

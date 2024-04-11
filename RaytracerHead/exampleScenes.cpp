@@ -11,19 +11,19 @@ Scene ExampleScenes::CreateSimple()
 	Material* greenMaterial = Material::Default();
 	greenMaterial->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 
-	Material* mirrorMaterial = Material::Default();
-	mirrorMaterial->type = MaterialType::Reflective;
+	Material* reflectiveMaterial = Material::Default();
+	reflectiveMaterial->type = MaterialType::Reflective;
 
 	Scene scene;
 
 	/// OBJECTS /////////////////////////////
 
 	Sphere* sphere1 = new Sphere(Vector3{ -0.6, -0.2, 3 }, 0.5);
-	sphere1->SetMaterial(mirrorMaterial);
+	sphere1->SetMaterial(reflectiveMaterial);
 	scene.AddObject(sphere1);
 
 	Sphere* sphere2 = new Sphere(Vector3{ 0.6, -0.4, 3 }, 0.5);
-	sphere2->SetMaterial(mirrorMaterial);
+	sphere2->SetMaterial(reflectiveMaterial);
 	scene.AddObject(sphere2);
 
 	Plane* plane = new Plane(Vector3{ 0, -1, 0 }, Vector3{ 0, 1, 0 });
@@ -48,14 +48,17 @@ Scene ExampleScenes::CreateCornellBox()
 	Material* greenMaterial = Material::Default();
 	greenMaterial->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 
+	Material* blueMaterial = Material::Default();
+	blueMaterial->color = Color (0, 0, 1, 1.0f);
+
 	Material* whiteMaterial = Material::Default();
 	whiteMaterial->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-	Material* mirrorMaterial = Material::Default();
-	mirrorMaterial->type = MaterialType::Reflective;
+	Material* reflectiveMaterial = Material::Default();
+	reflectiveMaterial->type = MaterialType::Reflective;
 
-	Material* blueMaterial = Material::Default();
-	blueMaterial->color = Color (0, 0, 1, 1.0f);
+	Material* refractiveMaterial = Material::Default();
+	refractiveMaterial->type = MaterialType::Refractive;
 
 	Scene scene;
 
@@ -82,19 +85,19 @@ Scene ExampleScenes::CreateCornellBox()
 	scene.AddObject(leftWall);
 
 	Sphere* sphere1 = new Sphere(Vector3{ -0.5f, -0.5f, 4.0f }, 0.5f);
-	sphere1->SetMaterial(redMaterial);
+	sphere1->SetMaterial(reflectiveMaterial);
 	scene.AddObject(sphere1);
 
 	Sphere* sphere2 = new Sphere(Vector3{ +0.30f, -0.25f, 2.75f }, 0.5f);
-	sphere2->SetMaterial(redMaterial);
+	sphere2->SetMaterial(refractiveMaterial);
 	scene.AddObject(sphere2);
 
 	Triangle* mirrorTriangle1 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f });
-	mirrorTriangle1->SetMaterial(blueMaterial);
+	mirrorTriangle1->SetMaterial(reflectiveMaterial);
 	scene.AddObject(mirrorTriangle1);
 
 	Triangle* mirrorTriangle2 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f }, Vector3{ -0.99f, -0.75f, 4.5f });
-	mirrorTriangle2->SetMaterial(blueMaterial);
+	mirrorTriangle2->SetMaterial(reflectiveMaterial);
 	scene.AddObject(mirrorTriangle2);
 
 	// LIGHT SPHERE

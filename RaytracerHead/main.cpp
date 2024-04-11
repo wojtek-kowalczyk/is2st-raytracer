@@ -69,21 +69,16 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 
 int main()
 {
-	Buffer orthoCameraTarget(600, 400);
-	orthoCameraTarget.ClearColor(0xFF000000);
 	Buffer perspCameraTarget(600, 400);
 	perspCameraTarget.ClearColor(0xFF000000);
 
-	OrthographicCamera orthoCamera(Vector3{ 0, 0, 0 }, orthoCameraTarget.GetWidth(), orthoCameraTarget.GetHeight(), 3.0f);
 	PerspectiveCamera perspCamera(Vector3{ 0, 0, 0 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
 
 	Scene scene = ExampleScenes::CreateCornellBox();
 	// Scene scene = ExampleScenes::CreateSimple();
 	
-	// RenderScene(scene, orthoCamera, orthoCameraTarget);
 	RenderScene(scene, perspCamera, perspCameraTarget);
 
-	orthoCameraTarget.SaveToFile("render_ortho.tga");
 	perspCameraTarget.SaveToFile("render_persp.tga");
 
 	return 0;

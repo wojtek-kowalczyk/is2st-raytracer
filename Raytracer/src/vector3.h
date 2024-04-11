@@ -36,6 +36,7 @@ struct Vector3
     bool IsNormalized() const;
 
     static Vector3 Reflect(const Vector3& incident, const Vector3& normal);
+    static bool Refract(const Vector3& incident, const Vector3& normal, float ior, Vector3& outRefractedVector);
     static float Dot(const Vector3& a, const Vector3& b);
     static Vector3 Cross(const Vector3& a, const Vector3& b);
     static float AngleRad(const Vector3& a, const Vector3& b);

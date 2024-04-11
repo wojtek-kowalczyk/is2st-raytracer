@@ -18,9 +18,9 @@ public:
     Color TraceRay(Ray ray) const;
 
 private:
-    static constexpr int BOUNCES = 4;
+    static constexpr int BOUNCES = 12;
     static constexpr Color BACKGROUND_COLOR = Color( 0.0f, 0.0f, 0.0f, 1.0f );
-    static constexpr Color ERROR_COLOR = Color(1.0f, 0.0f, 1.0f, 1.0f);
+    static constexpr Color OUT_OF_BOUNCES_COLOR = Color(1.0f, 0.0f, 1.0f, 1.0f);
 
     Color TraceRay(Ray ray, int ttl) const;
     bool GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit) const;
