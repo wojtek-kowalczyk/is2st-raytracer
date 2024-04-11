@@ -89,8 +89,6 @@ Color Scene::TraceRay(Ray ray, int ttl) const
 
         case MaterialType::Reflective:
         {
-            // TODO : remove this, this is excluded for testing
-            abort();
             // ray hit a reflective surface. Compute a reflection ray and trace it again.
             Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized();
             Vector3 reflectedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f);
