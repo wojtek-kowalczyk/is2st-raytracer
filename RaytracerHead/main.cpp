@@ -1,7 +1,9 @@
+#include <ios>
 #include <iostream>
 #include <ostream>
 #include <cassert>
 
+#include "primitives/plane.h"
 #include "ray.h"
 #include "vector3.h"
 #include "buffer.h"
@@ -43,11 +45,13 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 {
 	const float pixelSize = 1.0f;
 
-	for (int y = 0; y < target.GetHeight() - 1; y++)
+	for (int y = 0; y < target.GetHeight(); y++)
 	{
-		for (int x = 0; x < target.GetWidth() - 1; x++)
+		for (int x = 0; x < target.GetWidth(); x++)
 		{
-			Color finalColor = antialias((float)x, (float)y, scene, camera, pixelSize, 0, true);
+			// TODO : enable antialiasing again
+			// Color finalColor = antialias((float)x, (float)y, scene, camera, pixelSize, 0, true);
+			Color finalColor = scene.TraceRay(camera.ConstructRay(x, y));
 			target.ColorAt(x, y) = Color::ToInt(finalColor);
 		}	
 	}
@@ -64,9 +68,9 @@ int main()
 	PerspectiveCamera perspCamera(Vector3{ 0, 0, 0 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
 
 	Scene scene = ExampleScenes::CreateCornellBox();
-	//Scene scene = ExampleScenes::CreateSimple();
+	// Scene scene = ExampleScenes::CreateSimple();
 	
-	//RenderScene(scene, orthoCamera, orthoCameraTarget);
+	// RenderScene(scene, orthoCamera, orthoCameraTarget);
 	RenderScene(scene, perspCamera, perspCameraTarget);
 
 	orthoCameraTarget.SaveToFile("render_ortho.tga");

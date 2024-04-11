@@ -54,6 +54,9 @@ Scene ExampleScenes::CreateCornellBox()
 	Material* mirrorMaterial = Material::Default();
 	mirrorMaterial->type = MaterialType::Reflective;
 
+	Material* blueMaterial = Material::Default();
+	blueMaterial->color = Color (0, 0, 1, 1.0f);
+
 	Scene scene;
 
 	/// OBJECTS /////////////////////////////
@@ -62,22 +65,21 @@ Scene ExampleScenes::CreateCornellBox()
 	floor->SetMaterial(whiteMaterial);
 	scene.AddObject(floor);
 
-	//Plane* ceiling = new Plane(Vector3{ 0, 1, 0 }, Vector3{ 0, -1, 0 });
-	//ceiling->SetMaterial(whiteMaterial);
-	//scene.AddObject(ceiling);
+	Plane* ceiling = new Plane(Vector3{ 0, 1, 0 }, Vector3{ 0, -1, 0 });
+	ceiling->SetMaterial(whiteMaterial);
+	scene.AddObject(ceiling);
 
-	//Plane* backWall = new Plane(Vector3{ 0, 0, 5 }, Vector3{ 0, 0, -1 });
-	//backWall->SetMaterial(whiteMaterial);
-	//scene.AddObject(backWall);
+	Plane* backWall = new Plane(Vector3{ 0, 0, 5 }, Vector3{ 0, 0, -1 });
+	backWall->SetMaterial(whiteMaterial);
+	scene.AddObject(backWall);
 
-	// TODO : start from here - some weird shit is happening here. Floor by itself is ok. Also, adding ceiling makes everything dark.
 	Plane* rightWall = new Plane(Vector3{ 1, 0, 0 }, Vector3{ -1, 0, 0 });
 	rightWall->SetMaterial(redMaterial);
 	scene.AddObject(rightWall);
 
-	//Plane* leftWall = new Plane(Vector3{ -1, 0, 0 }, Vector3{ 1, 0, 0 });
-	//leftWall->SetMaterial(greenMaterial);
-	//scene.AddObject(leftWall);
+	Plane* leftWall = new Plane(Vector3{ -1, 0, 0 }, Vector3{ 1, 0, 0 });
+	leftWall->SetMaterial(greenMaterial);
+	scene.AddObject(leftWall);
 
 	Sphere* sphere1 = new Sphere(Vector3{ -0.5f, -0.5f, 4.0f }, 0.5f);
 	sphere1->SetMaterial(redMaterial);
@@ -87,13 +89,13 @@ Scene ExampleScenes::CreateCornellBox()
 	sphere2->SetMaterial(redMaterial);
 	scene.AddObject(sphere2);
 
-	//Triangle* mirrorTriangle1 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f });
-	//mirrorTriangle1->SetMaterial(mirrorMaterial);
-	//scene.AddObject(mirrorTriangle1);
+	Triangle* mirrorTriangle1 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f });
+	mirrorTriangle1->SetMaterial(blueMaterial);
+	scene.AddObject(mirrorTriangle1);
 
-	//Triangle* mirrorTriangle2 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f }, Vector3{ -0.99f, -0.75f, 4.5f });
-	//mirrorTriangle2->SetMaterial(mirrorMaterial);
-	//scene.AddObject(mirrorTriangle2);
+	Triangle* mirrorTriangle2 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f }, Vector3{ -0.99f, -0.75f, 4.5f });
+	mirrorTriangle2->SetMaterial(blueMaterial);
+	scene.AddObject(mirrorTriangle2);
 
 	// LIGHT SPHERE
 	//Sphere* lightSphere = new Sphere(Vector3{ 0.0f, 1.0f, 3.0f }, 0.1f);
@@ -102,7 +104,7 @@ Scene ExampleScenes::CreateCornellBox()
 	
 	/// LIGHTS //////////////////////////////
 
-	PointLight* pointLight = new PointLight(Color(1.0f, 1.0f, 1.0f), Vector3{ 0.5f, 0.5f, 0.0f });
+	PointLight* pointLight = new PointLight(Color(1.0f, 1.0f, 1.0f), Vector3{ 0.5f, 0.9f, 2.5f });
 	scene.AddLight(pointLight);
 
 	// TODO : we're leaking memory here, the Scene Objects aren't deallocated.

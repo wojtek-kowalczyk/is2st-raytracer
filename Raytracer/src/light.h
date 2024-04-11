@@ -7,7 +7,7 @@ class Light
 public:
 	Light(Color color) : m_color(color) {}
 	
-	virtual Vector3 GetDirection(Vector3 to) const = 0;
+	virtual Vector3 GetDirection(Vector3 to) const = 0; // from light to given vector
 	
 	Color GetColor() const { return m_color; }
 
@@ -20,7 +20,7 @@ class DirectionalLight : public Light
 public:
 	DirectionalLight(Color color, Vector3 direction) : Light(color), m_direction(direction) {}
 
-	virtual Vector3 GetDirection(Vector3 _) const override { return m_direction; }
+	virtual Vector3 GetDirection(Vector3 _) const override { abort() ; return m_direction; } // TODO : this dir is probably flipped
 
 private:
 	Vector3 m_direction;

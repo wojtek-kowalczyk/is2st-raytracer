@@ -8,8 +8,8 @@
 struct HitResult
 {
 	Vector3 hitPoint{ 0, 0, 0 };		// point of intersection
-	Vector3 hitNormal{ 0, 0, 0 };		// normal at the point of intersection
-	Material* material = nullptr;		// material of the object that was hit
+	Vector3 hitNormal{ 0, 0, 0 };		// normal at the point of intersection CARE! normal might be wrong if you hit a face from the other side! (e.g. hit plane from underneath)
+	Material* material = nullptr;			// material of the object that was hit
 };
 
 struct Ray

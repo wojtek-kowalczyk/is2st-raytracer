@@ -29,15 +29,21 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
 
     for (Light* light : m_lights)
     {
-        Vector3 toLight = -light->GetDirection(rayHit.hitPoint).Normalized();
-        Ray rayToLight(rayHit.hitPoint + rayHit.hitNormal * 0.01f, toLight.Normalized()); // 0.001f to avoid self-shadowing
+        Vector3 toLight = -( light->GetDirection(rayHit.hitPoint).Normalized() );
+        Ray rayToLight(rayHit.hitPoint + toLight * 0.01f, toLight); // 0.01f to avoid self-shadowing
         
-        HitResult _; // needn't be closest hit, just any hit
-        bool inShadow = GetClosestHit(rayToLight, _);
+        HitResult _; // needn't be closest hit, just any hit // TODO : verify this comment, now that we need distance
+        float distanceToHit;
+        bool inShadow = GetClosestHit(rayToLight, _, distanceToHit);
 
         if (inShadow)
         {
-            continue;
+            float distanceToLight = light->GetDirection(rayHit.hitPoint).Magnitude();
+            if (distanceToHit <= distanceToLight)
+            {
+                // the object was obscured
+                continue;
+            }
         }
     
         // compute the diffuse component
@@ -69,8 +75,8 @@ Color Scene::TraceRay(Ray ray, int ttl) const
     }
 
     HitResult rayHit;
-
-    if (GetClosestHit(ray, rayHit))
+    float _;
+    if (GetClosestHit(ray, rayHit, _))
     {
         const Material* objectMaterial = rayHit.material;
 
@@ -83,6 +89,8 @@ Color Scene::TraceRay(Ray ray, int ttl) const
 
         case MaterialType::Reflective:
         {
+            // TODO : remove this, this is excluded for testing
+            abort();
             // ray hit a reflective surface. Compute a reflection ray and trace it again.
             Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized();
             Vector3 reflectedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f);
@@ -107,7 +115,7 @@ Color Scene::TraceRay(Ray ray) const
     return TraceRay(ray, BOUNCES);
 }
 
-bool Scene::GetClosestHit(Ray ray, HitResult& outHitResult) const 
+bool Scene::GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit) const 
 {
     HitResult closestHit;
     float closestDistance = std::numeric_limits<float>::max();
@@ -128,6 +136,7 @@ bool Scene::GetClosestHit(Ray ray, HitResult& outHitResult) const
     if (closestDistance != std::numeric_limits<float>::max()) 
     {
         outHitResult = closestHit;
+        outDistanceToHit = closestDistance;
         return true;
     }
 

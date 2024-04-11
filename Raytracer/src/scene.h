@@ -10,7 +10,6 @@
 
 // TODO : sort out ownership of objects. Should the scene own them, or should it just reference them? heap vs stack?
 
-
 class Scene 
 {
 public:
@@ -24,7 +23,7 @@ private:
     static constexpr Color ERROR_COLOR = Color(1.0f, 0.0f, 1.0f, 1.0f);
 
     Color TraceRay(Ray ray, int ttl) const;
-    bool GetClosestHit(Ray ray, HitResult& outHitResult) const;
+    bool GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit) const;
     Color HandleDiffuse(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const;
     Color HandleReflective(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const;
     Color HandleTransmissive(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const;

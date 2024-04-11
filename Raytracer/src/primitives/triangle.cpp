@@ -14,7 +14,7 @@ bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 	Vector3 edgeV1V2 = v2 - v1;
 	Vector3 edgeV2V3 = v3 - v2;
 	Vector3 edgeV3V1 = v1 - v3;
-	Vector3 triangleNormal = Vector3::Cross(edgeV1V2, edgeV2V3);
+	Vector3 triangleNormal = Vector3::Cross(edgeV1V2, edgeV2V3).Normalized();
 
 	float dotRayDirectionTriangleNormal = Vector3::Dot(ray.direction, triangleNormal);
 	bool isOrthogonalToNormal = fabs(dotRayDirectionTriangleNormal) < 1e-6;
