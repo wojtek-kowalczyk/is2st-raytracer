@@ -33,9 +33,9 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
         // Ray rayToLight(rayHit.hitPoint + rayHit.hitNormal * 0.001f, toLight); // this makes wall corners show a warning and be black.
         Ray rayToLight(rayHit.hitPoint + toLight * 0.001f, toLight);
         
-        HitResult _; // needn't be closest hit, just any hit // TODO : verify this comment, now that we need distance
+        HitResult _; 
         float distanceToHit;
-        bool inShadow = GetClosestHit(rayToLight, _, distanceToHit);
+        bool inShadow = GetClosestHit(rayToLight, _, distanceToHit, true);
 
         if (inShadow)
         {
@@ -130,12 +130,17 @@ Color Scene::TraceRay(Ray ray) const
     return TraceRay(ray, BOUNCES);
 }
 
-bool Scene::GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit) const 
+bool Scene::GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit, bool ignoreRefractiveObjects) const 
 {
     HitResult closestHit;
     float closestDistance = std::numeric_limits<float>::max();
     for (SceneObject* object : m_objects) 
     {
+        if (ignoreRefractiveObjects && object->GetMaterial()->type == MaterialType::Refractive) 
+        {
+            continue;
+        }
+        
         HitResult currentHit;
         if (object->Hit(ray, currentHit)) 
         {

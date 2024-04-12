@@ -23,7 +23,7 @@ private:
     static constexpr Color OUT_OF_BOUNCES_COLOR = Color(1.0f, 0.0f, 1.0f, 1.0f);
 
     Color TraceRay(Ray ray, int ttl) const;
-    bool GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit) const;
+    bool GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit, bool ignoreRefractiveObjects = false) const;
     Color HandleDiffuse(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const;
     std::vector<SceneObject*> m_objects;
     std::vector<Light*> m_lights;

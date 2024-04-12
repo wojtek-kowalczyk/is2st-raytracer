@@ -149,7 +149,7 @@ bool Vector3::Refract(const Vector3& incident, const Vector3& normal, float ior,
     Vector3 N = normal.Normalized();
 
     bool hitFrontFace = Vector3::Dot(I, N) < 0;
-    double ri = hitFrontFace ? (1.0/ior) : ior;
+    double ri = hitFrontFace ? ior : (1.0 / ior);
     outRefractedVector = refract(I, N, ri);
 
     return true;

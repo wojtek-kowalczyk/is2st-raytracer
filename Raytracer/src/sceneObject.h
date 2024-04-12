@@ -13,6 +13,7 @@ public:
     virtual bool Hit(Ray ray) const = 0;
 
     void SetMaterial(Material* material) { m_material = material; }
+    const Material* GetMaterial() { return m_material; }
 
 protected:
     Material* m_material;

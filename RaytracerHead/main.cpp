@@ -74,8 +74,8 @@ int main()
 
 	PerspectiveCamera perspCamera(Vector3{ 0, 0, 0 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
 
-	// Scene scene = ExampleScenes::CreateCornellBox();
-	Scene scene = ExampleScenes::CreateSimple();
+	Scene scene = ExampleScenes::CreateCornellBox();
+	// Scene scene = ExampleScenes::CreateSimple();
 	
 	RenderScene(scene, perspCamera, perspCameraTarget);
 

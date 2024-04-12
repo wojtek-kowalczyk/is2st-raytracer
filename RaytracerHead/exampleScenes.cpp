@@ -76,7 +76,7 @@ Scene ExampleScenes::CreateCornellBox()
 	scene.AddObject(ceiling);
 
 	Plane* backWall = new Plane(Vector3{ 0, 0, 5 }, Vector3{ 0, 0, 1 });
-	backWall->SetMaterial(blueMaterial);
+	backWall->SetMaterial(whiteMaterial);
 	scene.AddObject(backWall);
 
 	Plane* rightWall = new Plane(Vector3{ 1, 0, 0 }, Vector3{ -1, 0, 0 });
@@ -87,21 +87,21 @@ Scene ExampleScenes::CreateCornellBox()
 	leftWall->SetMaterial(greenMaterial);
 	scene.AddObject(leftWall);
 
-	// Sphere* sphere1 = new Sphere(Vector3{ -0.5f, -0.5f, 4.0f }, 0.5f);
-	// sphere1->SetMaterial(reflectiveMaterial);
-	// scene.AddObject(sphere1);
+	Sphere* sphere1 = new Sphere(Vector3{ -0.5f, -0.5f, 4.0f }, 0.5f);
+	sphere1->SetMaterial(reflectiveMaterial);
+	scene.AddObject(sphere1);
 
-	Sphere* sphere2 = new Sphere(Vector3{ +0.30f, -0.25f, 2.75f }, 0.5f);
+	Sphere* sphere2 = new Sphere(Vector3{ +0.30f, -0.5f, 3.25f }, 0.5f);
 	sphere2->SetMaterial(refractiveMaterial);
 	scene.AddObject(sphere2);
 
-	// Triangle* mirrorTriangle1 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f });
-	// mirrorTriangle1->SetMaterial(reflectiveMaterial);
-	// scene.AddObject(mirrorTriangle1);
+	Triangle* mirrorTriangle1 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f });
+	mirrorTriangle1->SetMaterial(reflectiveMaterial);
+	scene.AddObject(mirrorTriangle1);
 
-	// Triangle* mirrorTriangle2 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f }, Vector3{ -0.99f, -0.75f, 4.5f });
-	// mirrorTriangle2->SetMaterial(reflectiveMaterial);
-	// scene.AddObject(mirrorTriangle2);
+	Triangle* mirrorTriangle2 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f }, Vector3{ -0.99f, -0.75f, 4.5f });
+	mirrorTriangle2->SetMaterial(reflectiveMaterial);
+	scene.AddObject(mirrorTriangle2);
 
 	// LIGHT SPHERE
 	//Sphere* lightSphere = new Sphere(Vector3{ 0.0f, 1.0f, 3.0f }, 0.1f);
@@ -110,7 +110,7 @@ Scene ExampleScenes::CreateCornellBox()
 	
 	/// LIGHTS //////////////////////////////
 
-	PointLight* pointLight = new PointLight(Color(1.0f, 1.0f, 1.0f), Vector3{ 0.5f, 0.9f, 2.5f });
+	PointLight* pointLight = new PointLight(Color(1.0f, 1.0f, 1.0f), Vector3{ 0, 0.97f, 2.5f });
 	scene.AddLight(pointLight);
 
 	// TODO : we're leaking memory here, the Scene Objects aren't deallocated.
