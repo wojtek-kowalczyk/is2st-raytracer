@@ -50,6 +50,11 @@ Vector3 Vector3::operator*(float scalar) const
     return result;
 }
 
+Vector3 operator*(float scalar, const Vector3& vector) 
+{
+    return vector * scalar;
+}
+
 Vector3 Vector3::operator/(float scalar) const
 {
     Vector3 result = *this;
@@ -92,15 +97,20 @@ Vector3 Vector3::Normalized() const
 
 float Vector3::Magnitude() const
 {
-    float tmp = x*x + y*y + z*z;
-    assert(tmp >= 0);
+    return sqrt(SquareMagnitude());
+}
 
-    if (tmp == 0)
+float Vector3::SquareMagnitude() const 
+{
+    float value = x*x + y*y + z*z;
+    assert(value >= 0);
+
+    if (value == 0)
     {
         std::cerr << "[WARNING] Vector3::Magnitude() called on zero vector. Make sure this isn't a mistake.\n";
     }
 
-    return sqrt(tmp);
+    return value;
 }
 
 bool Vector3::IsNormalized() const
@@ -115,30 +125,23 @@ Vector3 Vector3::Reflect(const Vector3& incident, const Vector3& normal)
     return incident - normal * Vector3::Dot(incident, normal) * 2.0f;
 }
 
-// Source https://stackoverflow.com/questions/29758545/how-to-find-refraction-vector-from-incoming-vector-and-surface-normal
+// Source: https://raytracing.github.io/books/RayTracingInOneWeekend.html#dielectrics/refraction
+inline Vector3 refract(const Vector3& uv, const Vector3& n, double etai_over_etat) {
+    auto cos_theta = fmin(Vector3::Dot(-uv, n), 1.0);
+    Vector3 r_out_perp =  etai_over_etat * (uv + cos_theta*n);
+    Vector3 r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.SquareMagnitude())) * n;
+    return r_out_perp + r_out_parallel;
+}
+
+// Source: https://stackoverflow.com/questions/29758545/how-to-find-refraction-vector-from-incoming-vector-and-surface-normal
 bool Vector3::Refract(const Vector3& incident, const Vector3& normal, float ior, Vector3& outRefractedVector) 
 {
-    const float n = ior;
-    const float cosI = abs(Vector3::Dot(normal, incident));
-    const float sinT2 = n * n * (1.0 - cosI * cosI);
-    if (sinT2 > 1.0) 
-    {
-        outRefractedVector = Vector3(0,0,0);
-        return false; // Total Internal Reflection
-    }
-    const float cosT = sqrt(1.0 - sinT2);
+    Vector3 I = incident.Normalized();
+    Vector3 N = normal.Normalized();
 
-    outRefractedVector = (incident * n) + normal * (n * cosI - cosT);
-    return true; // OK reflection
-
-    // Vector3 i = incident.Normalized();
-    // Vector3 n = normal.Normalized();
-    // float r = 1.0f/ior;
-    // float c = Vector3::Dot(-n, i);
-
-    // float tmp = (r*r)*(1-(c*c));
-    // outRefractedVector = i * r + n * (r*c - sqrt(1-tmp));
-    // std::cout << outRefractedVector << '\n';
+    bool hitFrontFace = Vector3::Dot(I, N) < 0;
+    double ri = hitFrontFace ? (1.0/ior) : ior;
+    outRefractedVector = refract(I, N, ri);
 
     return true;
 }

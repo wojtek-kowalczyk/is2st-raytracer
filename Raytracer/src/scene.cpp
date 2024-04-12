@@ -30,7 +30,8 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
     for (Light* light : m_lights)
     {
         Vector3 toLight = -( light->GetDirection(rayHit.hitPoint).Normalized() );
-        Ray rayToLight(rayHit.hitPoint + toLight * 0.01f, toLight); // 0.01f to avoid self-shadowing
+        // Ray rayToLight(rayHit.hitPoint + rayHit.hitNormal * 0.001f, toLight); // this makes wall corners show a warning and be black.
+        Ray rayToLight(rayHit.hitPoint + toLight * 0.001f, toLight);
         
         HitResult _; // needn't be closest hit, just any hit // TODO : verify this comment, now that we need distance
         float distanceToHit;
@@ -61,13 +62,6 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
     return ambient * objectMaterial->Ka + diffuse * objectMaterial->Kd + specular * objectMaterial->Ks;
 }
 
-Color Scene::HandleReflective(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const
-{
-    // TODO
-    assert(false);
-    return Color {1.0f,1,1,1};
-}
-
 Color Scene::TraceRay(Ray ray, int ttl) const
 {
     if (ttl <= 0) 
@@ -91,7 +85,7 @@ Color Scene::TraceRay(Ray ray, int ttl) const
         {
             // ray hit a reflective surface. Compute a reflection ray and trace it again.
             Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized();
-            Vector3 reflectedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f); // TODO : consider the case when the plane is hit from the back, hitnormal will be wrong then.
+            Vector3 reflectedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f);
             Ray reflectedRay = Ray(reflectedRayOrigin, reflectedRayDirection);
             return TraceRay(reflectedRay, ttl - 1);
         }
@@ -99,11 +93,14 @@ Color Scene::TraceRay(Ray ray, int ttl) const
         case MaterialType::Refractive:
         {
             // ray hit a refractive surface. Compute a reflection ray and trace it again.
-            const float waterIOR = 1.33f; // TODO : move out
             Vector3 refractedRayDirection;
-            bool reflected = Vector3::Refract(ray.direction, rayHit.hitNormal, waterIOR, refractedRayDirection);
-            if (!reflected) return OUT_OF_BOUNCES_COLOR;
-            Vector3 refractedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f);
+            bool refracted = Vector3::Refract(ray.direction, rayHit.hitNormal, 1.52f, refractedRayDirection);
+            if (!refracted)
+            {
+                std::cout << "Ray wasn't refracted!";
+                return Color(0, 0, 0, 1.0f);
+            }
+            Vector3 refractedRayOrigin = rayHit.hitPoint + (-rayHit.hitNormal * 0.001f); // flip the normal so that the ray continues behind the surface. TODO: is this needed?
             Ray refractedRay = Ray(refractedRayOrigin, refractedRayDirection.Normalized());
             return TraceRay(refractedRay, ttl - 1);
         }

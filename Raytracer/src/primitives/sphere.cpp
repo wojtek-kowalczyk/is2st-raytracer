@@ -32,7 +32,7 @@ bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 		if (x2 > 0)
 		{
 			outHitResult.hitPoint = ray.origin + ray.direction * x2;
-			outHitResult.hitNormal = (outHitResult.hitPoint - center).Normalized();
+			outHitResult.hitNormal = -(outHitResult.hitPoint - center).Normalized();
 			outHitResult.material = m_material;
 			
 			return true;
@@ -60,50 +60,6 @@ bool Sphere::Hit(Ray ray) const
 	HitResult _;
 	return Hit(ray, _);
 }
-
-// TODO : PIOTR
-// This is left for reference to implement adaptive anti-aliasing using the new system.
-// After that's done, please remove this code.
-
-#if 0 
-
-float Sphere::aaFactor(float x, float y, Sphere sphere, Camera& camera, float size, int failsafe)
-{
-	int hitSum = 0;
-	if (failsafe >= 2)
-	{
-		Ray ray = camera.ConstructRay(x, y);
-		return (float)sphere.Hit(ray);
-	}
-
-	float hits[4] = {};
-	float halfSize = size / 2.0f;
-
-	hits[0] = aaFactor(x, y, sphere, camera, halfSize, failsafe + 1);
-	hits[1] = aaFactor(x + halfSize, y, sphere, camera, halfSize, failsafe + 1);
-	hits[2] = aaFactor(x, y + halfSize, sphere, camera, halfSize, failsafe + 1);
-	hits[3] = aaFactor(x + halfSize, y + halfSize, sphere, camera, halfSize, failsafe + 1);
-	float sumOfHits = hits[0] + hits[1] + hits[2] + hits[3];
-
-	return sumOfHits / 4.0f;
-}
-
-unsigned int Sphere::finalColor(unsigned int color, float aaFactor)
-{
-	unsigned char alpha = (color >> 24) & 0xFF;
-	unsigned char r = (color >> 16) & 0xFF;
-	unsigned char g = (color >> 8) & 0xFF;
-	unsigned char b = color & 0xFF;
-
-	unsigned char finalAlpha = (unsigned char)(alpha * aaFactor);
-	unsigned char finalR = (unsigned char)(r * aaFactor);
-	unsigned char finalG = (unsigned char)(g * aaFactor);
-	unsigned char finalB = (unsigned char)(b * aaFactor);
-
-	unsigned int finalColor = (finalAlpha << 24) | (finalR << 16) | (finalG << 8) | finalB;
-	return finalColor;
-}
-#endif
 
 std::ostream& operator<<(std::ostream& os, const Sphere& s)
 {

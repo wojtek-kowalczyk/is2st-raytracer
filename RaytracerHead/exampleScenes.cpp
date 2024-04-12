@@ -73,7 +73,7 @@ Scene ExampleScenes::CreateCornellBox()
 	scene.AddObject(ceiling);
 
 	Plane* backWall = new Plane(Vector3{ 0, 0, 5 }, Vector3{ 0, 0, -1 });
-	backWall->SetMaterial(whiteMaterial);
+	backWall->SetMaterial(blueMaterial);
 	scene.AddObject(backWall);
 
 	Plane* rightWall = new Plane(Vector3{ 1, 0, 0 }, Vector3{ -1, 0, 0 });

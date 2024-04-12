@@ -1,4 +1,6 @@
 #include "triangle.h"
+#include "../color.h"
+#include "../material.h"
 
 #include <ostream>
 #include <cassert>
@@ -50,7 +52,8 @@ bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 		Vector3::Dot(triangleNormal, cross3) >= 0;
 
 	outHitResult.hitPoint = intersectionPoint;
-	outHitResult.hitNormal = triangleNormal;
+	bool hitFromFront = Vector3::Dot(triangleNormal, ray.direction) < 0;
+	outHitResult.hitNormal = hitFromFront? triangleNormal : -triangleNormal;
 	outHitResult.material = m_material;
 
 	return isInsideTriangle;

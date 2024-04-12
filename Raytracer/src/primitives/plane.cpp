@@ -24,7 +24,7 @@ bool Plane::Hit(Ray ray, HitResult& outHitResult) const
 	float t = Vector3::Dot(toPlanePointFromRayOrigin, normal) / denominator;
 
 	outHitResult.material = m_material;
-	outHitResult.hitNormal = normal;
+	outHitResult.hitNormal = denominator < 0 ? normal : -normal; // flip normal if hitting from back
 	outHitResult.hitPoint = ray.origin + ray.direction * t;
 
 	return (t >= 0);

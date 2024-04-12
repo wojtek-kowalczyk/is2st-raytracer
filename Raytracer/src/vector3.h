@@ -27,12 +27,14 @@ struct Vector3
     Vector3 operator+(const Vector3& other) const;
     Vector3 operator-(const Vector3& other) const;
     Vector3 operator*(float scalar) const;
+    friend Vector3 operator*(float scalar, const Vector3& vector);
     Vector3 operator/(float scalar) const;
     Vector3 operator-() const;
 
     void Normalize();
     Vector3 Normalized() const;
     float Magnitude() const;
+    float SquareMagnitude() const;
     bool IsNormalized() const;
 
     static Vector3 Reflect(const Vector3& incident, const Vector3& normal);
