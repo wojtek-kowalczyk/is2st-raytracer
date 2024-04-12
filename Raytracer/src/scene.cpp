@@ -92,16 +92,26 @@ Color Scene::TraceRay(Ray ray, int ttl) const
 
         case MaterialType::Refractive:
         {
-            // ray hit a refractive surface. Compute a reflection ray and trace it again.
+            // ray hit a refractive surface. Compute refracted ray and trace it again.
             Vector3 refractedRayDirection;
-            bool refracted = Vector3::Refract(ray.direction, rayHit.hitNormal, 1.52f, refractedRayDirection);
+            bool refracted = Vector3::Refract(ray.direction, rayHit.hitNormal, 1.5, refractedRayDirection);
             if (!refracted)
             {
                 std::cout << "Ray wasn't refracted!";
                 return Color(0, 0, 0, 1.0f);
             }
-            Vector3 refractedRayOrigin = rayHit.hitPoint + (-rayHit.hitNormal * 0.001f); // flip the normal so that the ray continues behind the surface. TODO: is this needed?
+            Vector3 refractedRayOrigin;
+            bool hitFromFront = Vector3::Dot(ray.direction, rayHit.hitNormal) < 0;
+            if (hitFromFront)
+            {
+                refractedRayOrigin = rayHit.hitPoint + (-rayHit.hitNormal * 0.001f); // reverse normal because the next ray must go through
+            }
+            else 
+            {
+                refractedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f); // dont reverse the normal because we want the ray to go outside.
+            }
             Ray refractedRay = Ray(refractedRayOrigin, refractedRayDirection.Normalized());
+            // std::cout << "incoming: " << ray << ", refracted: " << refractedRay << '\n'; 
             return TraceRay(refractedRay, ttl - 1);
         }
         default:

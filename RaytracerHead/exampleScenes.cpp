@@ -14,6 +14,9 @@ Scene ExampleScenes::CreateSimple()
 	Material* reflectiveMaterial = Material::Default();
 	reflectiveMaterial->type = MaterialType::Reflective;
 
+	Material* refractiveMaterial = Material::Default();
+	refractiveMaterial->type = MaterialType::Refractive;
+
 	Scene scene;
 
 	/// OBJECTS /////////////////////////////
@@ -23,7 +26,7 @@ Scene ExampleScenes::CreateSimple()
 	scene.AddObject(sphere1);
 
 	Sphere* sphere2 = new Sphere(Vector3{ 0.6, -0.4, 3 }, 0.5);
-	sphere2->SetMaterial(reflectiveMaterial);
+	sphere2->SetMaterial(refractiveMaterial);
 	scene.AddObject(sphere2);
 
 	Plane* plane = new Plane(Vector3{ 0, -1, 0 }, Vector3{ 0, 1, 0 });
@@ -72,7 +75,7 @@ Scene ExampleScenes::CreateCornellBox()
 	ceiling->SetMaterial(whiteMaterial);
 	scene.AddObject(ceiling);
 
-	Plane* backWall = new Plane(Vector3{ 0, 0, 5 }, Vector3{ 0, 0, -1 });
+	Plane* backWall = new Plane(Vector3{ 0, 0, 5 }, Vector3{ 0, 0, 1 });
 	backWall->SetMaterial(blueMaterial);
 	scene.AddObject(backWall);
 
@@ -84,21 +87,21 @@ Scene ExampleScenes::CreateCornellBox()
 	leftWall->SetMaterial(greenMaterial);
 	scene.AddObject(leftWall);
 
-	Sphere* sphere1 = new Sphere(Vector3{ -0.5f, -0.5f, 4.0f }, 0.5f);
-	sphere1->SetMaterial(reflectiveMaterial);
-	scene.AddObject(sphere1);
+	// Sphere* sphere1 = new Sphere(Vector3{ -0.5f, -0.5f, 4.0f }, 0.5f);
+	// sphere1->SetMaterial(reflectiveMaterial);
+	// scene.AddObject(sphere1);
 
 	Sphere* sphere2 = new Sphere(Vector3{ +0.30f, -0.25f, 2.75f }, 0.5f);
 	sphere2->SetMaterial(refractiveMaterial);
 	scene.AddObject(sphere2);
 
-	Triangle* mirrorTriangle1 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f });
-	mirrorTriangle1->SetMaterial(reflectiveMaterial);
-	scene.AddObject(mirrorTriangle1);
+	// Triangle* mirrorTriangle1 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f });
+	// mirrorTriangle1->SetMaterial(reflectiveMaterial);
+	// scene.AddObject(mirrorTriangle1);
 
-	Triangle* mirrorTriangle2 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f }, Vector3{ -0.99f, -0.75f, 4.5f });
-	mirrorTriangle2->SetMaterial(reflectiveMaterial);
-	scene.AddObject(mirrorTriangle2);
+	// Triangle* mirrorTriangle2 = new Triangle(Vector3{ -0.99f, -0.75f, 2.0f }, Vector3{ -0.99f, +0.75f, 4.5f }, Vector3{ -0.99f, -0.75f, 4.5f });
+	// mirrorTriangle2->SetMaterial(reflectiveMaterial);
+	// scene.AddObject(mirrorTriangle2);
 
 	// LIGHT SPHERE
 	//Sphere* lightSphere = new Sphere(Vector3{ 0.0f, 1.0f, 3.0f }, 0.1f);
