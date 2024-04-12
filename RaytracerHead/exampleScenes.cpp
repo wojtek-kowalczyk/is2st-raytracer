@@ -91,7 +91,7 @@ Scene ExampleScenes::CreateCornellBox()
 	sphere1->SetMaterial(reflectiveMaterial);
 	scene.AddObject(sphere1);
 
-	Sphere* sphere2 = new Sphere(Vector3{ +0.30f, -0.5f, 3.25f }, 0.5f);
+	Sphere* sphere2 = new Sphere(Vector3{ +0.50f, -0.5f, 3.0f }, 0.5f);
 	sphere2->SetMaterial(refractiveMaterial);
 	scene.AddObject(sphere2);
 
