@@ -32,7 +32,7 @@ bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 		if (x2 > 0)
 		{
 			outHitResult.hitPoint = ray.origin + ray.direction * x2;
-			outHitResult.hitNormal = -(outHitResult.hitPoint - center).Normalized();
+			outHitResult.hitNormal = (outHitResult.hitPoint - center).Normalized();
 			outHitResult.material = m_material;
 			
 			return true;

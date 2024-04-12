@@ -52,8 +52,7 @@ bool Triangle::Hit(Ray ray, HitResult& outHitResult) const
 		Vector3::Dot(triangleNormal, cross3) >= 0;
 
 	outHitResult.hitPoint = intersectionPoint;
-	bool hitFromFront = Vector3::Dot(triangleNormal, ray.direction) < 0;
-	outHitResult.hitNormal = hitFromFront? triangleNormal : -triangleNormal;
+	outHitResult.hitNormal = triangleNormal;
 	outHitResult.material = m_material;
 
 	return isInsideTriangle;
