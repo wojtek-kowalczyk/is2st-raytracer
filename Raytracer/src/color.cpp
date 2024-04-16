@@ -1,6 +1,7 @@
 #include "color.h"
 
-#include "cmath"
+#include <math.h>
+#include <assert.h>
 
 static float ClampColorChannel(float value)
 {
@@ -73,6 +74,12 @@ Color Color::operator*(float scalar) const
 	return Color(r * scalar, g * scalar, b * scalar, a * scalar);
 }
 
+Color Color::operator/(float divisor) const
+{
+	assert(divisor != 0.0f);
+	return (*this) * (1.0f / divisor);
+}
+
 Color& Color::operator+=(const Color& other)
 {
 	r += other.r;
@@ -99,6 +106,18 @@ Color& Color::operator*=(float scalar)
 	g *= scalar;
 	b *= scalar;
 	a *= scalar;
+
+	return *this;
+}
+
+Color& Color::operator/=(float divisor)
+{
+	assert(divisor != 0.0f);
+
+	r /= divisor;
+	g /= divisor;
+	b /= divisor;
+	a /= divisor;
 
 	return *this;
 }

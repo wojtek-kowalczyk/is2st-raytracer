@@ -11,6 +11,9 @@ Scene ExampleScenes::CreateSimple()
 	Material* greenMaterial = Material::Default();
 	greenMaterial->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 
+	Material* whiteMaterial = Material::Default();
+	whiteMaterial->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+
 	Material* reflectiveMaterial = Material::Default();
 	reflectiveMaterial->type = MaterialType::Reflective;
 
@@ -21,16 +24,16 @@ Scene ExampleScenes::CreateSimple()
 
 	/// OBJECTS /////////////////////////////
 
-	Sphere* sphere1 = new Sphere(Vector3{ -0.6, -0.2, 3 }, 0.5);
-	sphere1->SetMaterial(reflectiveMaterial);
-	scene.AddObject(sphere1);
+	Sphere* sphere1 = new Sphere(Vector3{ -0.6f, -0.2f, 3 }, 0.5f);
+	sphere1->SetMaterial(greenMaterial);
+	//scene.AddObject(sphere1);
 
-	Sphere* sphere2 = new Sphere(Vector3{ 0.6, -0.4, 3 }, 0.5);
-	sphere2->SetMaterial(refractiveMaterial);
+	Sphere* sphere2 = new Sphere(Vector3{ 0.0f, -0.5f, 3 }, 0.5f);
+	sphere2->SetMaterial(redMaterial);
 	scene.AddObject(sphere2);
 
 	Plane* plane = new Plane(Vector3{ 0, -1, 0 }, Vector3{ 0, 1, 0 });
-	plane->SetMaterial(greenMaterial);
+	plane->SetMaterial(whiteMaterial);
 	scene.AddObject(plane);
 
 	/// LIGHTS //////////////////////////////

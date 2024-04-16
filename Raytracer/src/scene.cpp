@@ -24,6 +24,7 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
 {
     assert(objectMaterial->type == MaterialType::Diffuse);
 
+    Color ambientLight(0.1f, 0.1f, 0.1f, 0.1f);
     Color diffuse(0, 0, 0, 1.0f);
     Color specular(0, 0, 0, 1.0f);
 
@@ -57,7 +58,7 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
     }
 
     assert(objectMaterial->color.IsClamped());
-    Color ambient = objectMaterial->color * m_ambientLight;
+    Color ambient = objectMaterial->color * ambientLight;
 
     return ambient * objectMaterial->Ka + diffuse * objectMaterial->Kd + specular * objectMaterial->Ks;
 }
@@ -120,14 +121,10 @@ Color Scene::TraceRay(Ray ray, int ttl) const
             break;
         }
     }
+	else
     {
         return BACKGROUND_COLOR;
     }
-}
-
-Color Scene::TraceRay(Ray ray) const
-{
-    return TraceRay(ray, BOUNCES);
 }
 
 bool Scene::GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit, bool ignoreRefractiveObjects) const 

@@ -20,12 +20,14 @@ public:
 	Color operator+(const Color& other) const;
 	Color operator*(const Color& other) const;
 	Color operator*(float scalar) const;
+	Color operator/(float divisor) const;
 	Color& operator+=(const Color& other);
 	Color& operator*=(const Color& other);
 	Color& operator*=(float scalar);
+	Color& operator/=(float divisor);
 	
 	friend std::ostream& operator<<(std::ostream& os, const Color& color);
 
-private:
+public:
 	float r, g, b, a;
 };
