@@ -125,14 +125,6 @@ Vector3 Vector3::Reflect(const Vector3& incident, const Vector3& normal)
     return incident - normal * Vector3::Dot(incident, normal) * 2.0f;
 }
 
-// Source: https://raytracing.github.io/books/RayTracingInOneWeekend.html#dielectrics/refraction
-// static inline Vector3 refract(const Vector3& uv, const Vector3& n, float etai_over_etat) {
-//     auto cos_theta = fmin(Vector3::Dot(-uv, n), 1.0);
-//     Vector3 r_out_perp =  etai_over_etat * (uv + cos_theta*n);
-//     Vector3 r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.SquareMagnitude())) * n;
-//     return r_out_perp + r_out_parallel;
-// }
-
 // Source: https://stackoverflow.com/questions/42218704/how-to-properly-handle-refraction-in-raytracing
 static inline Vector3 refract(Vector3 i, Vector3 n, float eta)
 {

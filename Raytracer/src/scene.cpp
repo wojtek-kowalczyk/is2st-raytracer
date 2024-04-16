@@ -94,7 +94,7 @@ Color Scene::TraceRay(Ray ray, int ttl) const
         {
             // ray hit a refractive surface. Compute refracted ray and trace it again.
             Vector3 refractedRayDirection;
-            bool refracted = Vector3::Refract(ray.direction, rayHit.hitNormal, 1.5, refractedRayDirection);
+            bool refracted = Vector3::Refract(ray.direction, rayHit.hitNormal, objectMaterial->ior, refractedRayDirection);
             if (!refracted)
             {
                 std::cout << "Ray wasn't refracted!";
