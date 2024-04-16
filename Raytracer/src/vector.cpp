@@ -1,11 +1,11 @@
 #include "vector3.h"
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-
 #include <math.h>
 #include <cassert>
 #include <iostream>
+#include <cstdlib>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 Vector3::Vector3() 
     : x(0), y(0), z(0)
@@ -78,7 +78,6 @@ std::ostream& operator<<(std::ostream& os, const Vector3& v)
     return os;
 }
 
-
 void Vector3::Normalize() 
 {
     const float mag = Magnitude();
@@ -142,7 +141,7 @@ bool Vector3::Refract(const Vector3& incident, const Vector3& normal, float ior,
 
     bool hitFrontFace = Vector3::Dot(I, N) < 0;
     double ri = hitFrontFace ? ior : (1.0 / ior);
-    outRefractedVector = refract(I, N, ri);
+    outRefractedVector = refract(I, N, (float)ri);
 
     return true;
 }
@@ -169,4 +168,42 @@ float Vector3::AngleRad(const Vector3& a, const Vector3& b)
 float Vector3::AngleDeg(const Vector3& a, const Vector3& b) 
 {
     return AngleRad(a, b) * (float)(180.0 / M_PI);
+}
+
+static float GetRandomFloat(float minInclusive, float maxInclusive)
+{
+    float random01 = (float)rand() / RAND_MAX;
+    return minInclusive + random01 * (maxInclusive - minInclusive);
+}
+
+// Source: https://math.stackexchange.com/questions/1163260/random-directions-on-hemisphere-oriented-by-an-arbitrary-vector
+Vector3 Vector3::RandomInsideUnitSphere()
+{
+    float x, y, z, d;
+
+    do
+    {
+        x = GetRandomFloat(-1, 1);
+        y = GetRandomFloat(-1, 1);
+        z = GetRandomFloat(-1, 1);
+        d = sqrtf(x * x + y * y + z * z);
+    } while (d > 1);
+
+    x = x / d;
+    y = y / d;
+    z = z / d;
+
+    return Vector3(x, y, z);
+}
+
+Vector3 Vector3::RandomHemisphereDirection(Vector3 normal)
+{
+    Vector3 randomDirection = RandomInsideUnitSphere();
+    
+    if (Vector3::Dot(randomDirection, normal) < 0)
+    {
+		randomDirection = -randomDirection;
+	}
+
+    return randomDirection;
 }

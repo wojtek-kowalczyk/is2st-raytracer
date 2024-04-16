@@ -1,8 +1,3 @@
-#include <ios>
-#include <iostream>
-#include <ostream>
-#include <cassert>
-
 #include "primitives/plane.h"
 #include "ray.h"
 #include "vector3.h"
@@ -11,30 +6,40 @@
 
 #include "exampleScenes.h"
 
-static constexpr int NUMBER_SAMPLES = 1;
+#include <iostream>
+#include <cassert>
+
+static constexpr int NUMBER_SAMPLES = 10;
 static constexpr int MAX_BOUNCES = 8;
 
 void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 {
 	const float pixelSize = 1.0f;
 
+	int linesRendered = 0;
+
 	for (int y = 0; y < target.GetHeight(); y++)
 	{
 		for (int x = 0; x < target.GetWidth(); x++)
 		{
-			Color finalColor = Color(0,0,0, 1.0f);
+			const Color startingColor = Color(1, 1, 1, 1.0f);
+
+			Color finalColor = Color(0, 0, 0, 1.0f);
 
 			for (int sample = 0; sample < NUMBER_SAMPLES; sample++)
 			{
-				Ray ray = camera.ConstructRay(x, y);
-				Color color = scene.TraceRay(ray, MAX_BOUNCES).Clamped();
+				const Ray ray = camera.ConstructRay((float)x, (float)y);
+				const Color color = scene.TraceRay(ray, startingColor, MAX_BOUNCES).Clamped();
 				finalColor += color;
 			}
 
 			finalColor /= NUMBER_SAMPLES;
 
 			target.ColorAt(x, y) = Color::ToInt(finalColor);
-		}	
+		}
+
+		++linesRendered;
+		std::cout << linesRendered << "/" << target.GetHeight() << '\n';
 	}
 }
 

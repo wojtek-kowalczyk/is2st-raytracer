@@ -43,6 +43,8 @@ struct Vector3
     static Vector3 Cross(const Vector3& a, const Vector3& b);
     static float AngleRad(const Vector3& a, const Vector3& b);
     static float AngleDeg(const Vector3& a, const Vector3& b);
+    static Vector3 RandomHemisphereDirection(Vector3 normal);
+    static Vector3 RandomInsideUnitSphere();
 
     friend std::ostream& operator<<(std::ostream& os, const Vector3& v);
 };

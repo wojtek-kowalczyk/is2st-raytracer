@@ -63,11 +63,15 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
     return ambient * objectMaterial->Ka + diffuse * objectMaterial->Kd + specular * objectMaterial->Ks;
 }
 
-Color Scene::TraceRay(Ray ray, int ttl) const
+Color Scene::TraceRay(Ray ray, Color color, int ttl) const
 {
-    if (ttl <= 0) 
+    static constexpr float DAMPING = 0.83f;
+    static constexpr Color DAMPING_CONSTANT = Color(1.0f * DAMPING, 1.0f * DAMPING, 1.0f * DAMPING, 1.0f);
+
+    const bool lessThanBlack = color.r < 0.0f || color.g < 0.0f || color.b < 0.0f;
+    if (ttl <= 0 || lessThanBlack) 
     {
-        return OUT_OF_BOUNCES_COLOR;
+        return color;
     }
 
     HitResult rayHit;
@@ -80,8 +84,14 @@ Color Scene::TraceRay(Ray ray, int ttl) const
         switch (objectMaterial->type)
         {
         case MaterialType::Diffuse:
-            return HandleDiffuse(objectMaterial, ray, rayHit);
+        {
+            Color newColor = color * objectMaterial->color * DAMPING_CONSTANT;
+            Vector3 randomDirection = Vector3::RandomHemisphereDirection(rayHit.hitNormal);
+            Ray randomRay(rayHit.hitPoint + rayHit.hitNormal * 0.001f, randomDirection);
+            return TraceRay(randomRay, newColor, ttl - 1);
+        }
 
+#if 0
         case MaterialType::Reflective:
         {
             // ray hit a reflective surface. Compute a reflection ray and trace it again.
@@ -115,6 +125,8 @@ Color Scene::TraceRay(Ray ray, int ttl) const
             // std::cout << "incoming: " << ray << ", refracted: " << refractedRay << '\n'; 
             return TraceRay(refractedRay, ttl - 1);
         }
+#endif
+        
         default:
             std::cerr << "Unhandled switch case\n";
             abort();
@@ -123,7 +135,7 @@ Color Scene::TraceRay(Ray ray, int ttl) const
     }
 	else
     {
-        return BACKGROUND_COLOR;
+        return color;
     }
 }
 

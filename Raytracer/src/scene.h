@@ -15,10 +15,10 @@ class Scene
 public:
     void AddObject(SceneObject* object);
     void AddLight(Light* light);
-    Color TraceRay(Ray ray, int ttl) const;
+    Color TraceRay(Ray ray, Color color, int ttl) const;
 
 private:
-    static constexpr Color BACKGROUND_COLOR = Color( 0.0f, 0.0f, 0.0f, 1.0f );
+    static constexpr Color BACKGROUND_COLOR = Color( 1.0f, 1.0f, 1.0f, 1.0f );
     static constexpr Color OUT_OF_BOUNCES_COLOR = Color(1.0f, 0.0f, 1.0f, 1.0f);
 
     bool GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit, bool ignoreRefractiveObjects = false) const;
