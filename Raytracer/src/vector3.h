@@ -44,7 +44,7 @@ struct Vector3
     static float AngleRad(const Vector3& a, const Vector3& b);
     static float AngleDeg(const Vector3& a, const Vector3& b);
     static Vector3 RandomHemisphereDirection(Vector3 normal);
-    static Vector3 RandomInsideUnitSphere();
+    static Vector3 RandomOnUnitSphere();
 
     friend std::ostream& operator<<(std::ostream& os, const Vector3& v);
 };

@@ -22,7 +22,7 @@ clean:
 	rm -f $(libobjects)
 	rm $(appname)
 	rm Raytracer/bin/lib/*
-	rm *.tga
+
 
 run:
 	make clean || echo ""

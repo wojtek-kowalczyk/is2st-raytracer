@@ -68,8 +68,7 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
     static constexpr float DAMPING = 0.83f;
     static constexpr Color DAMPING_CONSTANT = Color(1.0f * DAMPING, 1.0f * DAMPING, 1.0f * DAMPING, 1.0f);
 
-    const bool lessThanBlack = color.r < 0.0f || color.g < 0.0f || color.b < 0.0f;
-    if (ttl <= 0 || lessThanBlack) 
+    if (ttl <= 0)
     {
         return color;
     }
@@ -86,9 +85,11 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
         case MaterialType::Diffuse:
         {
             Color newColor = color * objectMaterial->color * DAMPING_CONSTANT;
-            Vector3 randomDirection = Vector3::RandomHemisphereDirection(rayHit.hitNormal);
-            Ray randomRay(rayHit.hitPoint + rayHit.hitNormal * 0.001f, randomDirection);
-            return TraceRay(randomRay, newColor, ttl - 1);
+            // more than 1-0.001 below, to avoid super rare case when we get zero vector
+            Vector3 bounceDirection = rayHit.hitNormal + Vector3::RandomOnUnitSphere() * 0.998; 
+            bounceDirection.Normalize();
+            Ray bounceRay(rayHit.hitPoint + rayHit.hitNormal * 0.001f, bounceDirection);
+            return TraceRay(bounceRay, newColor, ttl - 1);
         }
 
 #if 0

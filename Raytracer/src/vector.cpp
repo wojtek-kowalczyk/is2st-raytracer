@@ -177,7 +177,7 @@ static float GetRandomFloat(float minInclusive, float maxInclusive)
 }
 
 // Source: https://math.stackexchange.com/questions/1163260/random-directions-on-hemisphere-oriented-by-an-arbitrary-vector
-Vector3 Vector3::RandomInsideUnitSphere()
+Vector3 Vector3::RandomOnUnitSphere()
 {
     float x, y, z, d;
 
@@ -198,7 +198,7 @@ Vector3 Vector3::RandomInsideUnitSphere()
 
 Vector3 Vector3::RandomHemisphereDirection(Vector3 normal)
 {
-    Vector3 randomDirection = RandomInsideUnitSphere();
+    Vector3 randomDirection = RandomOnUnitSphere();
     
     if (Vector3::Dot(randomDirection, normal) < 0)
     {
