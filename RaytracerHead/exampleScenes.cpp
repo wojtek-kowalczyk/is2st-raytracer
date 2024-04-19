@@ -74,27 +74,27 @@ Scene ExampleScenes::CreateCornellBox()
 	floor->SetMaterial(whiteMaterial);
 	scene.AddObject(floor);
 
-	Plane* ceiling = new Plane(Vector3{ 0, 1, 0 }, Vector3{ 0, -1, 0 });
-	ceiling->SetMaterial(whiteMaterial);
-	scene.AddObject(ceiling);
+	// Plane* ceiling = new Plane(Vector3{ 0, 1, 0 }, Vector3{ 0, -1, 0 });
+	// ceiling->SetMaterial(whiteMaterial);
+	// scene.AddObject(ceiling);
 
-	Plane* backWall = new Plane(Vector3{ 0, 0, 5 }, Vector3{ 0, 0, 1 });
-	backWall->SetMaterial(whiteMaterial);
-	scene.AddObject(backWall);
+	// Plane* backWall = new Plane(Vector3{ 0, 0, 5 }, Vector3{ 0, 0, 1 });
+	// backWall->SetMaterial(whiteMaterial);
+	// scene.AddObject(backWall);
 
-	Plane* rightWall = new Plane(Vector3{ 1, 0, 0 }, Vector3{ -1, 0, 0 });
-	rightWall->SetMaterial(redMaterial);
-	scene.AddObject(rightWall);
+	// Plane* rightWall = new Plane(Vector3{ 1, 0, 0 }, Vector3{ -1, 0, 0 });
+	// rightWall->SetMaterial(redMaterial);
+	// scene.AddObject(rightWall);
 
 	Plane* leftWall = new Plane(Vector3{ -1, 0, 0 }, Vector3{ 1, 0, 0 });
 	leftWall->SetMaterial(greenMaterial);
 	scene.AddObject(leftWall);
 
-	Sphere* sphere1 = new Sphere(Vector3{ -0.5f, -0.5f, 4.0f }, 0.5f);
+	Sphere* sphere1 = new Sphere(Vector3{ -0.5f, -0.5f, 4.0f }, 0.48f);
 	sphere1->SetMaterial(reflectiveMaterial);
 	scene.AddObject(sphere1);
 
-	Sphere* sphere2 = new Sphere(Vector3{ +0.50f, -0.49f, 3.0f }, 0.5f);
+	Sphere* sphere2 = new Sphere(Vector3{ +0.50f, -0.49f, 3.0f }, 0.48f);
 	sphere2->SetMaterial(refractiveMaterial);
 	scene.AddObject(sphere2);
 

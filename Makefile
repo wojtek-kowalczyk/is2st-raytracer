@@ -14,7 +14,7 @@ all: $(appname)
 $(appname): $(objects)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $(libsrc) $(LDLIBS)
 	ar rcs Raytracer/bin/lib/libraytracer.a *.o
-	$(CXX) $(CXXFLAGS) -IRaytracer/src/ -o $(appname) $(headsrc) -LRaytracer/bin/lib -lraytracer
+	$(CXX) $(CXXFLAGS) -IRaytracer/src/ -o $(appname) $(headsrc) -LRaytracer/bin/lib -lraytracer -fopenmp
 
 clean:
 	rm *.o

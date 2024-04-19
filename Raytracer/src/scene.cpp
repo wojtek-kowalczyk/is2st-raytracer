@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "color.h"
 #include "material.h"
 #include "ray.h"
 #include "sceneObject.h"
@@ -65,8 +66,9 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
 
 Color Scene::TraceRay(Ray ray, Color color, int ttl) const
 {
-    static constexpr float DAMPING = 0.83f;
-    static constexpr Color DAMPING_CONSTANT = Color(1.0f * DAMPING, 1.0f * DAMPING, 1.0f * DAMPING, 1.0f);
+    static constexpr float DIFFUSE_DAMPING_CONSTANT = 0.83f;
+    static constexpr float REFLECTIVE_DAMPING_CONSTANT = 0.97f;
+    static constexpr float REFRACTIVE_DAMPING_CONSTANT = 0.98f;
 
     if (ttl <= 0)
     {
@@ -84,7 +86,7 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
         {
         case MaterialType::Diffuse:
         {
-            Color newColor = color * objectMaterial->color * DAMPING_CONSTANT;
+            Color newColor = color * objectMaterial->color * DIFFUSE_DAMPING_CONSTANT;
             // more than 1-0.001 below, to avoid super rare case when we get zero vector
             Vector3 bounceDirection = rayHit.hitNormal + Vector3::RandomOnUnitSphere() * 0.998; 
             bounceDirection.Normalize();
@@ -92,14 +94,15 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
             return TraceRay(bounceRay, newColor, ttl - 1);
         }
 
-#if 0
+#if 1
         case MaterialType::Reflective:
         {
             // ray hit a reflective surface. Compute a reflection ray and trace it again.
+            Color newColor = color * objectMaterial->color * REFLECTIVE_DAMPING_CONSTANT;
             Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized();
             Vector3 reflectedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f);
             Ray reflectedRay = Ray(reflectedRayOrigin, reflectedRayDirection);
-            return TraceRay(reflectedRay, ttl - 1);
+            return TraceRay(reflectedRay, newColor, ttl - 1);
         }
 
         case MaterialType::Refractive:
@@ -110,7 +113,7 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
             if (!refracted)
             {
                 std::cout << "Ray wasn't refracted!";
-                return Color(0, 0, 0, 1.0f);
+                return Color(1, 0, 1, 1.0f);
             }
             Vector3 refractedRayOrigin;
             bool hitFromFront = Vector3::Dot(ray.direction, rayHit.hitNormal) < 0;
@@ -124,7 +127,8 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
             }
             Ray refractedRay = Ray(refractedRayOrigin, refractedRayDirection.Normalized());
             // std::cout << "incoming: " << ray << ", refracted: " << refractedRay << '\n'; 
-            return TraceRay(refractedRay, ttl - 1);
+            Color newColor = color * objectMaterial->color * REFRACTIVE_DAMPING_CONSTANT;
+            return TraceRay(refractedRay, newColor, ttl - 1);
         }
 #endif
         
