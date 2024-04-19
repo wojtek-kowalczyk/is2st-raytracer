@@ -62,6 +62,7 @@ Scene ExampleScenes::CreateCornellBox()
 
 	Material* reflectiveMaterial = Material::Default();
 	reflectiveMaterial->type = MaterialType::Reflective;
+	reflectiveMaterial->roughness = 0.2f; // TODO : make this only for e.g. mirror
 
 	Material* refractiveMaterial = Material::Default();
 	refractiveMaterial->type = MaterialType::Refractive;

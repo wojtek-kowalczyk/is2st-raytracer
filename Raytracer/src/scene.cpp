@@ -91,8 +91,8 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
         case MaterialType::Diffuse:
         {
             Color newColor = color * objectMaterial->color * DIFFUSE_DAMPING_CONSTANT;
-            // more than 1-0.001 below, to avoid super rare case when we get zero vector
-            Vector3 bounceDirection = rayHit.hitNormal + Vector3::RandomOnUnitSphere() * 0.998; 
+            // 0.999 to avoid a case when we get a vector exactly opposite to normal
+            Vector3 bounceDirection = rayHit.hitNormal + Vector3::RandomOnUnitSphere() * 0.999f; 
             bounceDirection.Normalize();
             Ray bounceRay(rayHit.hitPoint, bounceDirection);
             return TraceRay(bounceRay, newColor, ttl - 1);
@@ -102,7 +102,9 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
         {
             // ray hit a reflective surface. Compute a reflection ray and trace it again.
             Color newColor = color * objectMaterial->color * REFLECTIVE_DAMPING_CONSTANT;
-            Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized();
+            Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized() +
+                Vector3::RandomOnUnitSphere() * objectMaterial->roughness;
+            reflectedRayDirection.Normalize();
             Vector3 reflectedRayOrigin = rayHit.hitPoint;
             Ray reflectedRay = Ray(reflectedRayOrigin, reflectedRayDirection);
             return TraceRay(reflectedRay, newColor, ttl - 1);

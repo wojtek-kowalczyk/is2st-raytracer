@@ -17,11 +17,12 @@ struct Material
 	float Ks;			// [0,1]. 1 == total reflection, i.e. a perfect mirror
 	float specularPow;	// (0, infinity). for phong lighting a.k.a shineness.
 	float ior;			// index of refraction, 1.52 glass, 1.33 water, 1.0 vacuum
+	float roughness;	// 0 - perfectly smooth, 1 - perfectly diffuse
 	MaterialType type;
 
 	static Material* Default()
 	{
-		Material* mat = new Material{ Color(1, 1, 1, 1.0f), 1.0f, 1.0f, 1.0f, 4.0f, 1.52f, MaterialType::Diffuse };
+		Material* mat = new Material{ Color(1, 1, 1, 1.0f), 1.0f, 1.0f, 1.0f, 4.0f, 1.52f, 0.0f, MaterialType::Diffuse };
 
 		return mat;
 	}
