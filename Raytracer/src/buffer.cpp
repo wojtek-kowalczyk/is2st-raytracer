@@ -1,9 +1,11 @@
 #include "buffer.h"
+#include "color.h"
 
 #include <cstdint>
 #include <assert.h>
 #include <cstdio>
 #include <limits>
+#include <cmath>
 
 // Ignore visual studio warning
 #pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS
@@ -29,6 +31,16 @@ void Buffer::ClearColor(ARGB color)
     }
 }
 
+static double LinearToGamma(double linear)
+{
+    if (linear > 0)
+    {
+        return sqrt(linear);
+    }
+
+    return 0;
+}
+
 void Buffer::SaveToFile(const char* filename)
 {
     unsigned short header[9] = {
@@ -36,6 +48,16 @@ void Buffer::SaveToFile(const char* filename)
         m_width, m_height,
         0x0820
     };
+
+    // Convert from linear to gamma space
+    for (int i = 0; i < m_width * m_height; i++) 
+    {
+        Color color = Color::FromInt(m_colorBuffer[i]);
+        color.r = LinearToGamma(color.r);
+        color.g = LinearToGamma(color.g);
+        color.b = LinearToGamma(color.b);
+        m_colorBuffer[i] = Color::ToInt(color);
+    }
 
     FILE* file = fopen(filename, "wb+");
     assert(file != nullptr);
