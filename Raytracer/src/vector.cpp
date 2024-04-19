@@ -96,20 +96,19 @@ Vector3 Vector3::Normalized() const
 
 float Vector3::Magnitude() const
 {
-    return sqrt(SquareMagnitude());
-}
-
-float Vector3::SquareMagnitude() const 
-{
-    float value = x*x + y*y + z*z;
-    assert(value >= 0);
+    float value = SquareMagnitude();
 
     if (value == 0)
     {
         std::cerr << "[WARNING] Vector3::Magnitude() called on zero vector. Make sure this isn't a mistake.\n";
     }
 
-    return value;
+    return sqrt(value);
+}
+
+float Vector3::SquareMagnitude() const 
+{
+    return x*x + y*y + z*z;
 }
 
 bool Vector3::IsNormalized() const

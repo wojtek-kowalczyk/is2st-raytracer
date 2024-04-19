@@ -24,9 +24,9 @@ Scene ExampleScenes::CreateSimple()
 
 	/// OBJECTS /////////////////////////////
 
-	Sphere* sphere1 = new Sphere(Vector3{ -0.6f, -0.2f, 3 }, 0.5f);
-	sphere1->SetMaterial(greenMaterial);
-	//scene.AddObject(sphere1);
+	// Sphere* sphere1 = new Sphere(Vector3{ -0.6f, -0.2f, 3 }, 0.45f);
+	// sphere1->SetMaterial(greenMaterial);
+	// scene.AddObject(sphere1);
 
 	Sphere* sphere2 = new Sphere(Vector3{ 0.0f, -0.5f, 3 }, 0.5f);
 	sphere2->SetMaterial(redMaterial);

@@ -5,6 +5,7 @@
 #include "sceneObject.h"
 #include "vector3.h"
 
+#include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <limits>
@@ -23,6 +24,10 @@ void Scene::AddLight(Light* light)
 
 Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const HitResult& rayHit) const
 {
+    std::cout << "Deprecated\n";
+    abort();
+    ///////////////////////////////////////////////////
+
     assert(objectMaterial->type == MaterialType::Diffuse);
 
     Color ambientLight(0.1f, 0.1f, 0.1f, 0.1f);
@@ -32,8 +37,7 @@ Color Scene::HandleDiffuse(const Material* objectMaterial, const Ray& ray, const
     for (Light* light : m_lights)
     {
         Vector3 toLight = -( light->GetDirection(rayHit.hitPoint).Normalized() );
-        // Ray rayToLight(rayHit.hitPoint + rayHit.hitNormal * 0.001f, toLight); // this makes wall corners show a warning and be black.
-        Ray rayToLight(rayHit.hitPoint + toLight * 0.001f, toLight);
+        Ray rayToLight(rayHit.hitPoint + toLight, toLight);
         
         HitResult _; 
         float distanceToHit;
@@ -76,8 +80,8 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
     }
 
     HitResult rayHit;
-    float _;
-    if (GetClosestHit(ray, rayHit, _))
+    float distanceToHit;
+    if (GetClosestHit(ray, rayHit, distanceToHit))
     {
         const Material* objectMaterial = rayHit.material;
         assert(objectMaterial != nullptr);
@@ -90,17 +94,16 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
             // more than 1-0.001 below, to avoid super rare case when we get zero vector
             Vector3 bounceDirection = rayHit.hitNormal + Vector3::RandomOnUnitSphere() * 0.998; 
             bounceDirection.Normalize();
-            Ray bounceRay(rayHit.hitPoint + rayHit.hitNormal * 0.001f, bounceDirection);
+            Ray bounceRay(rayHit.hitPoint, bounceDirection);
             return TraceRay(bounceRay, newColor, ttl - 1);
         }
 
-#if 1
         case MaterialType::Reflective:
         {
             // ray hit a reflective surface. Compute a reflection ray and trace it again.
             Color newColor = color * objectMaterial->color * REFLECTIVE_DAMPING_CONSTANT;
             Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized();
-            Vector3 reflectedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f);
+            Vector3 reflectedRayOrigin = rayHit.hitPoint;
             Ray reflectedRay = Ray(reflectedRayOrigin, reflectedRayDirection);
             return TraceRay(reflectedRay, newColor, ttl - 1);
         }
@@ -115,22 +118,11 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
                 std::cout << "Ray wasn't refracted!";
                 return Color(1, 0, 1, 1.0f);
             }
-            Vector3 refractedRayOrigin;
-            bool hitFromFront = Vector3::Dot(ray.direction, rayHit.hitNormal) < 0;
-            if (hitFromFront)
-            {
-                refractedRayOrigin = rayHit.hitPoint + (-rayHit.hitNormal * 0.001f); // reverse normal because the next ray must go through
-            }
-            else 
-            {
-                refractedRayOrigin = rayHit.hitPoint + (rayHit.hitNormal * 0.001f); // dont reverse the normal because we want the ray to go outside.
-            }
-            Ray refractedRay = Ray(refractedRayOrigin, refractedRayDirection.Normalized());
+            Ray refractedRay = Ray(rayHit.hitPoint, refractedRayDirection.Normalized());
             // std::cout << "incoming: " << ray << ", refracted: " << refractedRay << '\n'; 
             Color newColor = color * objectMaterial->color * REFRACTIVE_DAMPING_CONSTANT;
             return TraceRay(refractedRay, newColor, ttl - 1);
         }
-#endif
         
         default:
             std::cerr << "Unhandled switch case\n";
@@ -147,32 +139,43 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
 bool Scene::GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit, bool ignoreRefractiveObjects) const 
 {
     HitResult closestHit;
-    float closestDistance = std::numeric_limits<float>::max();
+    float closestDistanceSquared = std::numeric_limits<float>::max();
     for (SceneObject* object : m_objects) 
     {
         if (ignoreRefractiveObjects && object->GetMaterial()->type == MaterialType::Refractive) 
         {
             continue;
         }
-        
+
         HitResult currentHit;
         if (object->Hit(ray, currentHit)) 
         {
-            float distanceToHit = (currentHit.hitPoint - ray.origin).Magnitude();
-            if (distanceToHit < closestDistance) 
+            float distanceToHitSquared = (currentHit.hitPoint - ray.origin).SquareMagnitude();
+
+            if (distanceToHitSquared < 0.00001f) 
             {
-                closestDistance = distanceToHit;
+                continue;
+            }
+
+            if (distanceToHitSquared < closestDistanceSquared) 
+            {
+                closestDistanceSquared = distanceToHitSquared;
                 closestHit = currentHit;
             }
         }
     }
 
-    if (closestDistance != std::numeric_limits<float>::max()) 
+    if (closestDistanceSquared != std::numeric_limits<float>::max()) 
     {
         outHitResult = closestHit;
-        outDistanceToHit = closestDistance;
+        if (closestDistanceSquared == 0) 
+        {
+            std::cerr << "[WARNING] Calling call sqrt(0). Make sure this isn't a mistake.\n";
+        }
+        outDistanceToHit = sqrt(closestDistanceSquared);
         return true;
     }
 
+    outHitResult.material = nullptr; // crash the app if we try to use it without checking if there was a hit
     return false;
 }
