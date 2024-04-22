@@ -12,7 +12,7 @@ Scene ExampleScenes::CreateSimple()
 	greenMaterial->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 
 	Material* greyMaterial = Material::Default();
-	greyMaterial->color = Color(0.85f, 0.85f, 0.85f, 1.0f);
+	greyMaterial->color = Color(0.6f, 0.6f, 0.6f, 1.0f);
 
 	Material* reflectiveMaterial = Material::Default();
 	reflectiveMaterial->type = MaterialType::Reflective;
@@ -20,6 +20,8 @@ Scene ExampleScenes::CreateSimple()
 
 	Material* refractiveMaterial = Material::Default();
 	refractiveMaterial->type = MaterialType::Refractive;
+	refractiveMaterial->ior = 1.5f;
+	//refractiveMaterial->ior = 1.0f / 1.33f;
 
 	Scene scene;
 
@@ -40,13 +42,6 @@ Scene ExampleScenes::CreateSimple()
 	Plane* plane = new Plane(Vector3{ 0, -0.6, 0 }, Vector3{ 0, 1, 0 });
 	plane->SetMaterial(greyMaterial);
 	scene.AddObject(plane);
-
-	/// LIGHTS //////////////////////////////
-
-	PointLight* pointLight1 = new PointLight(Color(1.0f, 1.0f, 1.0f), Vector3{ 1, 2, 1 });
-	scene.AddLight(pointLight1);
-
-	// TODO : we're leaking memory here, the Scene Objects aren't deallocated.
 
 	return scene;
 }
@@ -117,12 +112,5 @@ Scene ExampleScenes::CreateCornellBox()
 	//lightSphere->SetMaterial(whiteMaterial); // TODO : emissive white, i.e. all pixels are pure white
 	//scene.AddObject(lightSphere);
 	
-	/// LIGHTS //////////////////////////////
-
-	PointLight* pointLight = new PointLight(Color(1.0f, 1.0f, 1.0f), Vector3{ 0, 0.97f, 2.5f });
-	scene.AddLight(pointLight);
-
-	// TODO : we're leaking memory here, the Scene Objects aren't deallocated.
-
 	return scene;
 }
