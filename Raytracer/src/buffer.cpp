@@ -31,7 +31,7 @@ void Buffer::ClearColor(ARGB color)
     }
 }
 
-static double LinearToGamma(double linear)
+static float LinearToGamma(float linear)
 {
     if (linear > 0)
     {

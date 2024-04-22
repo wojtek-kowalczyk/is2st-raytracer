@@ -6,7 +6,6 @@
 
 #include "exampleScenes.h"
 
-#include <bits/chrono.h>
 #include <chrono>
 #include <cstdio>
 #include <iostream>
@@ -36,7 +35,8 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 			{
 				const Ray ray = camera.ConstructRay((float)x, (float)y);
 				const Color color = scene.TraceRay(ray, startingColor, MAX_BOUNCES).Clamped();
-				finalColor += color;
+				const Color alphaAdjustedColor = Color(color.r, color.g, color.b, 1.0f); // TODO : maybe drop alpha from color altogether?
+				finalColor += alphaAdjustedColor;
 			}
 
 			finalColor /= NUMBER_SAMPLES;
@@ -49,7 +49,7 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 	}
 
 	auto endTime = std::chrono::steady_clock::now();
-	unsigned long milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+	unsigned long milliseconds = (unsigned long)std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
 	printf("Rendering took: %.2fs\n", milliseconds * 0.001);
 }
 
