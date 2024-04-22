@@ -11,11 +11,12 @@ Scene ExampleScenes::CreateSimple()
 	Material* greenMaterial = Material::Default();
 	greenMaterial->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 
-	Material* whiteMaterial = Material::Default();
-	whiteMaterial->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	Material* greyMaterial = Material::Default();
+	greyMaterial->color = Color(0.85f, 0.85f, 0.85f, 1.0f);
 
 	Material* reflectiveMaterial = Material::Default();
 	reflectiveMaterial->type = MaterialType::Reflective;
+	reflectiveMaterial->roughness = 0.0f;
 
 	Material* refractiveMaterial = Material::Default();
 	refractiveMaterial->type = MaterialType::Refractive;
@@ -24,16 +25,20 @@ Scene ExampleScenes::CreateSimple()
 
 	/// OBJECTS /////////////////////////////
 
-	// Sphere* sphere1 = new Sphere(Vector3{ -0.6f, -0.2f, 3 }, 0.45f);
-	// sphere1->SetMaterial(greenMaterial);
-	// scene.AddObject(sphere1);
+	Sphere* sphere1 = new Sphere(Vector3{ -1.1f, -0.1f, 3 }, 0.5f);
+	sphere1->SetMaterial(refractiveMaterial);
+	scene.AddObject(sphere1);
 
-	Sphere* sphere2 = new Sphere(Vector3{ 0.0f, -0.5f, 3 }, 0.5f);
+	Sphere* sphere2 = new Sphere(Vector3{ 0.0f, -0.1f, 3 }, 0.5f);
 	sphere2->SetMaterial(redMaterial);
 	scene.AddObject(sphere2);
 
-	Plane* plane = new Plane(Vector3{ 0, -1, 0 }, Vector3{ 0, 1, 0 });
-	plane->SetMaterial(whiteMaterial);
+	Sphere* sphere3 = new Sphere(Vector3{ +1.1f, -0.1f, 3 }, 0.5f);
+	sphere3->SetMaterial(reflectiveMaterial);
+	scene.AddObject(sphere3);
+
+	Plane* plane = new Plane(Vector3{ 0, -0.6, 0 }, Vector3{ 0, 1, 0 });
+	plane->SetMaterial(greyMaterial);
 	scene.AddObject(plane);
 
 	/// LIGHTS //////////////////////////////

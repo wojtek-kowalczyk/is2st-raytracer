@@ -12,6 +12,19 @@
 #include <cassert>
 #include <math.h>
 
+Scene::~Scene()
+{
+    for (SceneObject* object : m_objects)
+    {
+		delete object;
+	}
+
+    for (Light* light : m_lights)
+    {
+		delete light;
+	}
+}
+
 void Scene::AddObject(SceneObject* object) 
 {
     m_objects.push_back(object);
@@ -100,7 +113,6 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
 
         case MaterialType::Reflective:
         {
-            // ray hit a reflective surface. Compute a reflection ray and trace it again.
             Color newColor = color * objectMaterial->color * REFLECTIVE_DAMPING_CONSTANT;
             Vector3 reflectedRayDirection = Vector3::Reflect(ray.direction, rayHit.hitNormal).Normalized() +
                 Vector3::RandomOnUnitSphere() * objectMaterial->roughness;
@@ -112,12 +124,12 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
 
         case MaterialType::Refractive:
         {
-            // ray hit a refractive surface. Compute refracted ray and trace it again.
             Vector3 refractedRayDirection;
             bool refracted = Vector3::Refract(ray.direction, rayHit.hitNormal, objectMaterial->ior, refractedRayDirection);
             if (!refracted)
             {
-                std::cout << "Ray wasn't refracted!";
+                // TODO : handle this case with reflection? TIR?
+                std::cerr << "Ray wasn't refracted!";
                 return Color(1, 0, 1, 1.0f);
             }
             Ray refractedRay = Ray(rayHit.hitPoint, refractedRayDirection.Normalized());

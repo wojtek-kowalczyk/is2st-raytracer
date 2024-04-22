@@ -21,7 +21,10 @@ bool Sphere::Hit(Ray ray, HitResult& outHitResult) const
 		float x1 = (-b - sqrt(discriminant)) / a;
 		float x2 = (-b + sqrt(discriminant)) / a;
 
-		if (x1 > 0)
+		// HACK : test against small epsilon to avoid self intersection
+		// This is also handled by the caller, but sphere can be hit twice so we need to handle it here
+		// because otherwise the other side of the sphere will get ignored (introductes artifacts in refraction)
+		if (x1 > 0.00001f) 
 		{
 			outHitResult.hitPoint = ray.origin + ray.direction * x1;
 			outHitResult.hitNormal = (outHitResult.hitPoint - center).Normalized();

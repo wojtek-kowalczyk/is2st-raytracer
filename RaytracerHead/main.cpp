@@ -12,7 +12,7 @@
 #include <cassert>
 #include <ratio>
 
-static constexpr int NUMBER_SAMPLES = 10;
+static constexpr int NUMBER_SAMPLES = 25;
 static constexpr int MAX_BOUNCES = 8;
 
 void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
@@ -60,7 +60,7 @@ int main()
 
 	PerspectiveCamera perspCamera(Vector3{ 0, 0, 0 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
 
-	Scene scene = ExampleScenes::CreateCornellBox();
+	Scene scene = ExampleScenes::CreateSimple();
 	
 	RenderScene(scene, perspCamera, perspCameraTarget);
 
