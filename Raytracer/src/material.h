@@ -7,6 +7,7 @@ enum class MaterialType
 	Diffuse,
 	Reflective,
 	Refractive,
+	Emissive,
 };
 
 struct Material

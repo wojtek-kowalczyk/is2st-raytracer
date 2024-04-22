@@ -76,7 +76,12 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
             Color newColor = color * objectMaterial->color * REFRACTIVE_DAMPING_CONSTANT;
             return TraceRay(refractedRay, newColor, ttl - 1);
         }
-        
+
+        case MaterialType::Emissive:
+        {
+            return color + objectMaterial->color;
+        }
+
         default:
             std::cerr << "Unhandled switch case\n";
             abort();

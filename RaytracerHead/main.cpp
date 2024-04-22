@@ -12,7 +12,7 @@
 #include <cassert>
 #include <ratio>
 
-static constexpr int NUMBER_SAMPLES = 25;
+static constexpr int NUMBER_SAMPLES = 100;
 static constexpr int MAX_BOUNCES = 8;
 
 void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
@@ -34,7 +34,10 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 			for (int sample = 0; sample < NUMBER_SAMPLES; sample++)
 			{
 				const Ray ray = camera.ConstructRay((float)x, (float)y);
-				const Color color = scene.TraceRay(ray, startingColor, MAX_BOUNCES).Clamped();
+				const Color color = scene.TraceRay(ray, startingColor, MAX_BOUNCES);
+				assert(color.r >= 0.0f);
+				assert(color.g >= 0.0f);
+				assert(color.b >= 0.0f);
 				const Color alphaAdjustedColor = Color(color.r, color.g, color.b, 1.0f); // TODO : maybe drop alpha from color altogether?
 				finalColor += alphaAdjustedColor;
 			}

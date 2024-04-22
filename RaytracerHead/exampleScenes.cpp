@@ -23,6 +23,10 @@ Scene ExampleScenes::CreateSimple()
 	refractiveMaterial->ior = 1.5f;
 	//refractiveMaterial->ior = 1.0f / 1.33f;
 
+	Material* emissiveMaterial = Material::Default();
+	emissiveMaterial->type = MaterialType::Emissive;
+	emissiveMaterial->color = Color(1, 1, 1, 1.0f) * 3;
+
 	Scene scene;
 
 	/// OBJECTS /////////////////////////////
@@ -38,6 +42,10 @@ Scene ExampleScenes::CreateSimple()
 	Sphere* sphere3 = new Sphere(Vector3{ +1.1f, -0.1f, 3 }, 0.5f);
 	sphere3->SetMaterial(reflectiveMaterial);
 	scene.AddObject(sphere3);
+
+	Sphere* sphere4 = new Sphere(Vector3{ +0.4f, -0.5f, 2.2f }, 0.1f);
+	sphere4->SetMaterial(emissiveMaterial);
+	scene.AddObject(sphere4);
 
 	Plane* plane = new Plane(Vector3{ 0, -0.6, 0 }, Vector3{ 0, 1, 0 });
 	plane->SetMaterial(greyMaterial);
