@@ -15,3 +15,4 @@ packages/
 
 # Other ignores
 *.tga
+!renders/*.tga
