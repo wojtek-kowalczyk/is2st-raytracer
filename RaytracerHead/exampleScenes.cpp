@@ -25,7 +25,7 @@ Scene ExampleScenes::CreateSimple()
 
 	Material* emissiveMaterial = Material::Default();
 	emissiveMaterial->type = MaterialType::Emissive;
-	emissiveMaterial->color = Color(1, 1, 1, 1.0f) * 3;
+	emissiveMaterial->color = Color(1, 1, 0, 1.0f) * 3;
 
 	Scene scene;
 

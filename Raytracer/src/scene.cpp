@@ -79,7 +79,8 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
 
         case MaterialType::Emissive:
         {
-            return color + objectMaterial->color;
+            Color tint = objectMaterial->color.Clamped(); // The emission color is likely to be above 1
+            return (color * tint) + objectMaterial->color; // addition here makes it possible to add light to the scene
         }
 
         default:

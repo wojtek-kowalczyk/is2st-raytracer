@@ -12,7 +12,7 @@
 #include <cassert>
 #include <ratio>
 
-static constexpr int NUMBER_SAMPLES = 100;
+static constexpr int NUMBER_SAMPLES = 25;
 static constexpr int MAX_BOUNCES = 8;
 
 void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
