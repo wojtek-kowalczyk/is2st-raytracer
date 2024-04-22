@@ -14,6 +14,8 @@ public:
     void AddObject(SceneObject* object);
     Color TraceRay(Ray ray, Color color, int ttl) const;
 
+    Color ambientColor = Color(1, 1, 1, 1.0f);
+
 private:
     bool GetClosestHit(Ray ray, HitResult& outHitResult, float& outDistanceToHit, bool ignoreRefractiveObjects = false) const;
 

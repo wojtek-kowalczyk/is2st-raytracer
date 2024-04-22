@@ -33,7 +33,7 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
 
     if (ttl <= 0)
     {
-        return color;
+        return color * ambientColor;
     }
 
     HitResult rayHit;
@@ -79,8 +79,12 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
 
         case MaterialType::Emissive:
         {
-            Color tint = objectMaterial->color.Clamped(); // The emission color is likely to be above 1
-            return (color * tint) + objectMaterial->color; // addition here makes it possible to add light to the scene
+            // Cornell box look ok with this
+            return color * objectMaterial->color;
+
+            // But open scenes look better with this?
+            //Color tint = objectMaterial->color.Clamped();
+            //return (color * tint) + objectMaterial->color;
         }
 
         default:
@@ -91,7 +95,7 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
     }
 	else
     {
-        return color;
+        return color * ambientColor;
     }
 }
 
