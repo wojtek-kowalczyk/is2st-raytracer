@@ -79,7 +79,7 @@ Color Scene::TraceRay(Ray ray, Color color, int ttl) const
 
         case MaterialType::Emissive:
         {
-            // Cornell box look ok with this
+            // Cornell box looks ok with this
             return color * objectMaterial->color;
 
             // But open scenes look better with this?

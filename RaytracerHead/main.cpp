@@ -12,7 +12,7 @@
 #include <cassert>
 #include <ratio>
 
-static constexpr int NUMBER_SAMPLES = 25;
+static constexpr int NUMBER_SAMPLES = 2048;
 static constexpr int MAX_BOUNCES = 8;
 
 void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
@@ -20,7 +20,6 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 	const float pixelSize = 1.0f;
 
 	auto startTime = std::chrono::steady_clock::now();
-	int linesRendered = 0;
    
    	#pragma omp parallel for
 	for (int y = 0; y < target.GetHeight(); y++)
@@ -46,9 +45,6 @@ void RenderScene(const Scene& scene, const Camera& camera, Buffer& target)
 
 			target.ColorAt(x, y) = Color::ToInt(finalColor);
 		}
-
-		// ++linesRendered;
-		// std::cout << linesRendered << "/" << target.GetHeight() << '\n';
 	}
 
 	auto endTime = std::chrono::steady_clock::now();
@@ -60,9 +56,7 @@ int main()
 {
 	Buffer perspCameraTarget(600, 400);
 	perspCameraTarget.ClearColor(0xFF000000);
-
 	PerspectiveCamera perspCamera(Vector3{ 0, 0, 0 }, perspCameraTarget.GetWidth(), perspCameraTarget.GetHeight(), 45.0f);
-
 	Scene scene = ExampleScenes::CreateCornellBox();
 	
 	RenderScene(scene, perspCamera, perspCameraTarget);

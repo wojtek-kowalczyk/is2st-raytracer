@@ -43,6 +43,8 @@ static float LinearToGamma(float linear)
 
 void Buffer::SaveToFile(const char* filename)
 {
+    // TGA format
+
     unsigned short header[9] = {
         0x0000, 0x0002, 0x0000, 0x0000, 0x0000, 0x0000,
         m_width, m_height,

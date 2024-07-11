@@ -7,9 +7,9 @@
 
 struct HitResult
 {
-	Vector3 hitPoint{ 0, 0, 0 }; // point of intersection
-	Vector3 hitNormal{ 0, 0, 0 }; // normal at the point of intersection, pointing outward from the geometry regardless of hit side.
-	Material* material = nullptr; // material of the object that was hit
+	Vector3 hitPoint{ 0, 0, 0 };	// point of intersection
+	Vector3 hitNormal{ 0, 0, 0 };	// normal at the point of intersection, pointing outward from the geometry regardless of hit side.
+	Material* material = nullptr;	// material of the object that was hit
 };
 
 struct Ray
@@ -24,4 +24,3 @@ struct Ray
 };
 
 std::ostream& operator<<(std::ostream& os, const Ray& r);
-

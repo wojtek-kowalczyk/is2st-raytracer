@@ -16,3 +16,4 @@ packages/
 # Other ignores
 *.tga
 !renders/*.tga
+!Github/*.tga

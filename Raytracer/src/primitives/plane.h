@@ -2,7 +2,6 @@
 
 #include "../vector3.h"
 #include "../sceneObject.h"
-#include "../camera.h" // TODO : shouldn't be needed
 
 struct Plane : public SceneObject
 {
