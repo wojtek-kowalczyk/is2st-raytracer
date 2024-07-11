@@ -1,6 +1,7 @@
 # Ray/Path Tracer
 
-![Sample render, 2048 samples per pixel, 8 bounces per ray](Github/render.png)
+![Example Cornell Box Scene render, 2048 samples per pixel, 8 bounces per ray](Github/cornell.png)
+![Example Simple Scene render, 2000 samples per pixel](Github/simple.png)
 
 This repository is the final project for Photorealistic Graphics class at Lodz University of Technology.
 
